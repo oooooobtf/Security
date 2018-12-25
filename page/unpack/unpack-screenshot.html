@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>安检室</title>
+		<link rel="stylesheet" href="../../css/com.css" />
+		<link rel="stylesheet" href="../../fonts/7-stroke/7-stroke.css" />
+		<link rel="stylesheet" href="../../fonts/font-awesome/font-awesome.css" />
+		<link rel="stylesheet" href="../../fonts/glyphicons/glyphicons.css" />
+		<link rel="stylesheet" href="../../fonts/ionicons/ionicons.css" />
+		<link rel="stylesheet" href="../../fonts/material-design/material-design.css" />
+		<link rel="stylesheet" href="../../fonts/mfglabs/mfglabs.css" />
+		<link rel="stylesheet" href="../../fonts/octicons/octicons.css" />
+		<link rel="stylesheet" href="../../fonts/open-iconic/open-iconic.css" />
+		<link rel="stylesheet" href="../../fonts/themify/themify.css" />
+		<link rel="stylesheet" href="../../fonts/weather-icons/weather-icons.css" />
+		<link rel="stylesheet" href="../../fonts/web-icons/web-icons.css" />
+		<script type="text/javascript">
+			var _qcap = null;
+			var _dev = null;
+			var _clone = null
+
+			function closeIt() {
+				/*if(_clone != null)
+				{
+					_destroyClone();
+				}*/
+
+				if(_dev != null) {
+					_destroy();
+				}
+			}
+
+			function _create() {
+				//create
+				var args_create = new ActiveXObject("QCAP.Args");
+				args_create.Append("QP0203 PCI");
+				args_create.Append(0);
+				args_create.Append(canvas.Handle);
+				//args_create.Append(0);
+				args_create.Append(null); // OUT
+				args_create.Append(1);
+				args_create.Append(1);
+				var ret = _qcap.QCAP_CREATE(args_create);
+				_dev = args_create.GetAt(3);
+
+				//AUDIO VOLUME
+				var args_VOLUME = new ActiveXObject("QCAP.Args");
+				args_VOLUME.Append(_dev);
+				args_VOLUME.Append(0);
+				var ret = _qcap.QCAP_SET_AUDIO_VOLUME(args_VOLUME);
+
+				//osd picture
+				var args_VOLUME = new ActiveXObject("QCAP.Args");
+				args_VOLUME.Append(_dev);
+				args_VOLUME.Append(0);
+				var ret = _qcap.QCAP_SET_AUDIO_VOLUME(args_VOLUME);
+
+				//run
+				var args_run = new ActiveXObject("QCAP.Args");
+				args_run.Append(_dev);
+				var ret = _qcap.QCAP_RUN(args_run);
+
+			}
+
+			function _destroy() {
+				if(_dev != null) {
+					//stop
+					var args_stop = new ActiveXObject("QCAP.Args");
+					args_stop.Append(_dev);
+					var ret = _qcap.QCAP_STOP(args_stop);
+
+					//destroy
+					var args_destroy = new ActiveXObject("QCAP.Args");
+					args_destroy.Append(_dev);
+					var ret = _qcap.QCAP_DESTROY(args_destroy);
+
+					_dev = null;
+				}
+			}
+
+			function _SnapshotBMP() {
+				if(_dev == null) return;
+
+				var args = new ActiveXObject("QCAP.Args");
+				args.Append(_dev);
+				args.Append("D:/Snapshot_BMP.BMP");
+				args.Append(0);
+				var ret = _qcap.QCAP_SNAPSHOT_BMP(args);
+				//msgbox.innerHTML = "QCAP_SNAPSHOT_BMP, qres=" + ret;
+			}
+
+			function _SnapshotJPG(num) {
+				if(_dev == null) return;
+				var timestamp = (new Date()).valueOf();
+				var args = new ActiveXObject("QCAP.Args");
+				random = randomNumber(); //随机数
+				var ret = _qcap.QCAP_SNAPSHOT_JPG(args);
+				var uploadUrl = '';
+				//console.log(uploadUrl)
+				if(num == 1) {
+					createFolder(2);
+                    uploadUrl = folderPathUrl + timestamp + random + ".JPG";
+                    // console.log(imgUrl,'FTP自动截取图片');
+                    // var imgUrl = folderPath + timestamp + random + ".JPG";
+                    /*args.Append(_dev);
+                    args.Append(uploadUrl);
+                    args.Append(40);
+                    ret = _qcap.QCAP_SNAPSHOT_JPG(args);*/
+					modalTitle(String(uploadUrl), args, _dev, timestamp, random); //手动截取
+
+				} else {
+					createFolder(1);
+
+                    uploadUrl = '\\'+ALLScreenShotPhoto +'\\'+ folderPathUrl + timestamp + random + ".JPG";
+                    // var imgUrl = folderPath + timestamp + random + ".JPG";
+                    // console.log(imgUrl,'FTP自动截取图片');
+                   /* args.Append(_dev);
+                    args.Append(uploadUrl);
+                    args.Append(40);
+                    ret = _qcap.QCAP_SNAPSHOT_JPG(args);*/
+                    //console.log(uploadUrl);
+					allScreenShotUpdate(String(uploadUrl), args, _dev, timestamp, random); //自动截取
+				}
+			}
+
+			function _StartRecord() {
+				if(_dev == null) return;
+				//set video property
+				var args_set_video_property = new ActiveXObject("QCAP.Args");
+				args_set_video_property.Append(_dev);
+				args_set_video_property.Append(0);
+				args_set_video_property.Append(0);
+				args_set_video_property.Append(0);
+				args_set_video_property.Append(1);
+				args_set_video_property.Append(8000);
+				args_set_video_property.Append(8000000);
+				args_set_video_property.Append(30);
+				args_set_video_property.Append(0);
+				args_set_video_property.Append(0);
+				args_set_video_property.Append(0);
+				var ret = _qcap.QCAP_SET_VIDEO_RECORD_PROPERTY(args_set_video_property);
+
+				//set audio property
+				var args_set_audio_property = new ActiveXObject("QCAP.Args");
+				args_set_audio_property.Append(_dev);
+				args_set_audio_property.Append(0);
+				args_set_audio_property.Append(0);
+				//args_set_audio_property.Append(.....AudioEncoderFormatEnum.ATL_QCAP_ENCODER_FORMAT_AAC);
+				args_set_audio_property.Append(1);
+				var ret = _qcap.QCAP_SET_AUDIO_RECORD_PROPERTY(args_set_audio_property);
+
+				//start record
+				var args_start_record = new ActiveXObject("QCAP.Args");
+				args_start_record.Append(_dev);
+				args_start_record.Append(0);
+				args_start_record.Append("D:/record.mp4");
+				var ret = _qcap.QCAP_START_RECORD(args_start_record);
+				msgbox.innerHTML = "QCAP_START_RECORD, qres=" + ret;
+			}
+
+			function _StopRecord() {
+				if(_dev == null) return;
+
+				var args = new ActiveXObject("QCAP.Args");
+				args.Append(_dev);
+				args.Append(0);
+				var ret = _qcap.QCAP_STOP_RECORD(args);
+				msgbox.innerHTML = "QCAP_STOP_RECORD, qres=" + ret;
+			}
+
+			function _createClone() {
+				//create clone
+				var args = new ActiveXObject("QCAP.Args");
+				args.Append(_dev);
+				args.Append(canvas_clone.Handle);
+				args.Append(null); // OUT
+				var ret = _qcap.QCAP_CREATE_CLONE(args);
+				_clone = args.GetAt(2);
+
+				//run clone
+				var args_run = new ActiveXObject("QCAP.Args");
+				args_run.Append(_clone);
+				var ret = _qcap.QCAP_RUN(args_run);
+			}
+
+			function _destroyClone() {
+				if(_clone != null) {
+					//stop clone
+					var args_stop = new ActiveXObject("QCAP.Args");
+					args_stop.Append(_clone);
+					var ret = _qcap.QCAP_STOP(args_stop);
+
+					//destroy clone
+					var args_destroy = new ActiveXObject("QCAP.Args");
+					args_destroy.Append(_clone);
+					var ret = _qcap.QCAP_DESTROY(args_destroy);
+
+					_clone = null;
+				}
+			}
+
+			function _OSDText() {
+				var args = new ActiveXObject("QCAP.Args");
+				args.Append(_dev);
+				args.Append(0);
+				args.Append(10);
+				args.Append(10);
+				args.Append(0);
+				args.Append(0);
+				args.Append("YUAN TEST");
+				args.Append("Arial");
+				args.Append(1);
+				args.Append(100);
+				args.Append(0xFFFF0000);
+				args.Append(0xFFFFFFFF);
+				args.Append(128);
+				var ret = _qcap.QCAP_SET_OSD_TEXT(args);
+			}
+
+			function _OSDPicture() {
+				var args = new ActiveXObject("QCAP.Args");
+				args.Append(_dev);
+				args.Append(0);
+				args.Append(10);
+				args.Append(10);
+				args.Append(0);
+				args.Append(0);
+				args.Append("D:/Project/Project/ActiveX 170.8/Snapshot_JPG.JPG");
+				args.Append(128);
+				var ret = _qcap.QCAP_SET_OSD_PICTURE(args);
+			}
+		</script>
+		<style>
+			#body {
+				overflow: hidden;
+				margin: 0;
+				padding: 0;
+				/*padding-top: 2%;*/
+				font-family: "Microsoft Yahei", "Helvetica Neue", Helvetica, Tahoma, Arial, "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+			}
+			
+			/*#canvas {
+				position: relative;
+				left: 50%;
+				transform: translateX(-50%);
+				margin: 0 auto;
+			}*/
+			.content-box{
+				width: 1520px;
+				height: 100%;
+				margin: auto;
+				position: relative;
+				overflow: hidden;
+				text-align: center;
+			}
+			.button-box {
+				width: 100%;
+				text-align: center;
+				margin-top: 10px;
+			}
+			
+			.button-box>button {
+				width: 100%;
+				background: #62a8ea;
+				display: inline-block;
+				/*padding: 4px 12px;*/
+				height: 75px;
+				line-height: 75px;
+				margin-bottom: 0;
+				font-size: 14px;
+				font-weight: 400;
+				line-height: 1.6;
+				text-align: center;
+				white-space: nowrap;
+				cursor: pointer;
+				background-image: none;
+				border: 1px solid transparent;
+				border-radius: 3px;
+				color: #fff;
+				box-shadow: 0 0 3px rgba(0, 0, 0, .15), 0 3px 6px rgba(0, 0, 0, .2);
+			}
+			
+			.button-box>button:hover {
+				background: #89bceb;
+				border-color: #89bceb;
+			}
+			
+			.button-box>button:active {
+				background-color: #4e97d9;
+				border-color: #4e97d9;
+			}
+			
+
+
+			input::-ms-clear{
+				display:none;
+			}
+			.add-order{
+				display: none;
+			}
+			.x-video{
+				width: 100%;
+				height: 855px;
+				margin: 120px auto 0;
+			}
+			@media screen and (min-width: 1366px) and (max-width: 1439px){
+				.content-box{
+					width: 960px;
+				}
+				.x-video{
+					height: 540px;
+				}
+			}
+			@media screen and (min-width: 1440px) and (max-width: 1600px){
+				.content-box{
+					width: 1120px;
+				}
+				.x-video{
+					height: 630px;
+				}
+			}
+			@media screen and (min-width: 1601px) and (max-width: 1919px){
+				.content-box{
+					width: 1200px;
+				}
+				.x-video{
+					height: 720px;
+				}
+			}
+		</style>
+	</head>
+
+	<body id="body">
+		<!--头部-->
+		<header style="z-index: auto;">
+			<div class="logo"></div>
+			<div class="user-operate">
+				<span  class="setting" onclick="$('.add-order').show()" style="display: none;margin-right:40px"><i class="icon wb-user"></i>个人设置</span>
+				<span class="username" onclick="$('.exit').show()"><i class="icon fa-sign-out"></i><span></span></span>
+			</div>
+		</header>
+
+		<div class="content-box">
+			<!-- X视频 -->
+			<div class="x-video" style="height: 614.4px">
+				<object classid="clsid:19B2E559-4F61-4E9F-9A10-12DB2FC34085" id="canvas" width="" height=""></object>
+			</div>
+			<div class="button-box succ">
+				<button onclick="_SnapshotJPG(1);">截图并发送给开包台</button>
+			</div>
+
+		<!--	<div id="modalBox" class="modal-box">
+				<span class="modal-close" onclick="modalClose()"><i></i></span>
+				<span class="modal-title">截图上传成功!</span>
+			</div>-->
+			<!--通知弹窗-->
+			<div class="notice-model success-notice" style="top: 70px;text-align: left" >
+				<i class=" icon  wb-info-circle"></i>
+				<span>截图上传成功！</span>
+			</div>
+		</div>
+
+
+		<!-- 提示弹窗-->
+		<div class="pop-up-windows hint-windows exit">
+			<div class="shadow-window" onclick="$('.exit').hide()"></div>
+			<div class="vertical-center success" style="left: 54%;top: 7%;">
+				<div class="title">
+					<i class="icon wb-bell hint-icon"></i>
+					<span>你确定退出当前用户？</span>
+					<i class="icon wb-close close-pop" onclick="$('.exit').hide()"></i>
+				</div>
+				<div class="pop-button">
+					<span class="confirm-btn" onclick="loginout()">确定</span>
+					<span class="cancle-btn" onclick="$('.exit').hide()">取消</span>
+				</div>
+			</div>
+		</div>
+		<!-- 提示弹窗  end-->
+		
+		<!--修改的弹窗（编辑弹窗）-->
+		<div class="pop-up-windows edit-windows add-order">
+			<div class="shadow-window" onclick="closeWindow()"></div>
+			<div class="pop-up-vertical-center pop-content" style="width: 40%;">
+				<div class="title">
+					<span>个人信息设置</span>
+					<span class="icon pe-close" onclick="closeWindow()"></span>
+				</div>
+				<div class="pop-body">
+					<form name="form" id="orderForm">
+						<div class="pop-col">
+							<div>
+								<p style="margin: 13px 0;">旧密码</p>
+								<input class="pop-input" id="oldPsd" autocomplete="off" name="oldPsd"  onkeyup="verifyFrom(this)" />
+								<span class="error-hint-text">输入旧密码</span>
+							</div>
+							<div>
+								<p style="margin: 13px 0;">新密码</p>
+								<input class="pop-input" id="newPsd" name="newPsd" autocomplete="off"  onkeyup="verifyFrom(this)" />
+								<span class="error-hint-text">输入新密码</span>
+							</div>
+
+						</div>
+						<div class="pop-col">
+							<div>
+								<p style="margin: 13px 0;">确认新密码</p>
+								<input class="pop-input" id="againPsd" name="againPsd" autocomplete="off"  onkeyup="verifyFrom(this)" />
+								<span class="error-hint-text">确认新密码</span>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<div class="pop-footer">
+					<button class="pop-submit" onclick="postSetting()">提交</button>
+					<button class="pop-cancle" onclick="closeWindow()">取消</button>
+				</div>
+			</div>
+		</div>
+		
+		<script src="../../lib/jquery-2.0.1.min.js"></script>
+		<script src="../../js/com.js"></script>
+		<script src="../../js/Utils.js"></script>
+		<script src="../../js/unpack/unpack-screenshot.js"></script>
+		<script>
+			window.onbeforeunload = closeIt;
+		</script>
+	</body>
+
+</html>

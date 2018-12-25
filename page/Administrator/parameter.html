@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>一般参数</title>
+		<link rel="stylesheet" href="../../css/com.css" />
+		<link rel="stylesheet" href="../../fonts/7-stroke/7-stroke.css" />
+		<link rel="stylesheet" href="../../fonts/font-awesome/font-awesome.css" />
+		<link rel="stylesheet" href="../../fonts/glyphicons/glyphicons.css" />
+		<link rel="stylesheet" href="../../fonts/ionicons/ionicons.css" />
+		<link rel="stylesheet" href="../../fonts/material-design/material-design.css" />
+		<link rel="stylesheet" href="../../fonts/mfglabs/mfglabs.css" />
+		<link rel="stylesheet" href="../../fonts/octicons/octicons.css" />
+		<link rel="stylesheet" href="../../fonts/open-iconic/open-iconic.css" />
+		<link rel="stylesheet" href="../../fonts/themify/themify.css" />
+		<link rel="stylesheet" href="../../fonts/weather-icons/weather-icons.css" />
+		<link rel="stylesheet" href="../../fonts/web-icons/web-icons.css" />
+		<!--<link rel="stylesheet" type="text/css" href="../lib/css/tooltip.css"/>-->
+		<link rel="stylesheet" href="../../lib/css/imgPlugin.css" />
+		<link rel="stylesheet" href="../../css/Administrator/parameter.css" />
+	</head>
+
+	<body>
+		<!--头部-->
+		<header>
+			<div class="logo"></div>
+			<div class="user-operate" id="headerMenu">
+				<!--<span><i class="icon wb-user"></i>个人设置</span>
+				<span class="username" onclick="$('.hint-windows').show()"><i class="icon fa-sign-out " ></i>用户名</span>-->
+			</div>
+		</header>
+
+		<!--菜单-->
+		<div class="menu" id="menuList">
+
+		</div>
+
+		<!--通道管理-->
+		<section class="main" id="mainContainer" v-cloak>
+			<div class="container">
+				<span class="bigtitle">一般参数设置</span>
+				<div class="pop-body">
+					<form name="form" id="orderForm">
+						<!--<div class="pop-col">
+								<div>
+									<p>视频保存时间 <span v-if="videoT" style="position: absolute;right: 66px;">（上次设置为{{videoT}}）</span></p>
+									<div class="pop-select video" @click="showSelect(1)">
+										<input id="videoTime" disabled="disabled" style="background-color: #FFFFFF;" readonly="readonly" autocomplete="off" v-model="videoTime" @blur="inputBlur(1)" name="videoTime" />
+										<span class="select-icon">
+                                	    <i class="icon wb-triangle-down"></i>
+                                        </span>
+
+									</div>
+									<ul class="pop-ul" v-show="videoShow">
+										<li v-for="j in videoSelect" @click="chooseGroup(j,1)">{{j}}</li>
+
+									</ul>
+									<span class="error-hint-text videotext" style="position: relative;">选择视频保存时间</span>
+								</div>
+						</div>-->
+						<div class="pop-col">
+								<div>
+									<p>图片保存时间<span style="position: absolute;right: 66px;"></span></p>
+									<div class="pop-select img" @click="showSelect(2)">
+										<input id="imgTime" disabled="disabled" style="background-color: #FFFFFF;" readonly="readonly" autocomplete="off" v-model="imgTime" @blur="inputBlur(2)" name="imgTime" />
+										<span class="select-icon">
+                                	    <i class="icon wb-triangle-down"></i>
+                                        </span>
+
+									</div>
+									<ul class="pop-ul" v-show="imgShow">
+										<li v-for="j in imgSelect" @click="chooseGroup(j,2)">{{j}}</li>
+
+									</ul>
+									<span class="error-hint-text imgtext" style="position: relative;">选择图片保存时间</span>
+								</div>
+						</div>
+						<div class="pop-col">
+								<div>
+									<p>截屏卡间隔时间<span  style="position: absolute;right: 70px;"></span></p>
+									<div class="pop-select card" @click="showSelect(3)">
+										<input id="cardTime" disabled="disabled" style="background-color: #FFFFFF;" readonly="readonly" autocomplete="off" v-model="cardTime" @blur="inputBlur(3)" name="cardTime" />
+										<span class="select-icon">
+                                	    <i class="icon wb-triangle-down"></i>
+                                        </span>
+
+									</div>
+									<ul class="pop-ul" v-show="cardShow">
+										<li v-for="j in cardSelect" @click="chooseGroup(j,3)">{{j}}</li>
+
+									</ul>
+									<span class="error-hint-text cardtext" style="position: relative;">选择截屏卡间隔时间</span>
+								</div>
+						</div>
+						
+
+					</form>
+				</div>
+				<div class="pop-footer" style="margin-top: 20px;">
+					<button class="pop-submit-user" onclick="postPeople()">提交</button>
+				</div>
+			</div>
+
+			<!-- 提示弹窗-->
+			<div class="pop-up-windows hint-windows exit">
+				<div class="shadow-window" onclick="$('.exit').hide()"></div>
+				<div class="vertical-center success" style="left: 54%;">
+					<div class="title">
+						<i class="icon wb-bell hint-icon"></i>
+						<span>你确定退出当前用户？</span>
+						<i class="icon wb-close close-pop" onclick="$('.exit').hide()"></i>
+					</div>
+					<div class="pop-button">
+						<span class="confirm-btn" onclick="loginout()">确定</span>
+						<span class="cancle-btn" onclick="$('.exit').hide()">取消</span>
+					</div>
+				</div>
+			</div>
+			<!-- 提示弹窗  end-->
+			<!--登录提示-->
+			<div id="loginHint" class="notice-model">
+				<i class="icon  wb-info-circle"></i>
+				<span></span>
+			</div>
+
+		</section>
+
+		<script type="text/javascript" src="../../lib/jquery-2.0.1.min.js"></script>
+		<script type="text/javascript" src="../../lib/laydate/laydate.js"></script>
+		<script type="text/javascript" src="../../lib/yfslPageControl.js"></script>
+		<script type="text/javascript" src="../../lib/bootstrap.js"></script>
+		<script type="text/javascript" src="../../js/Utils.js"></script>
+		<script type="text/javascript" src="../../js/com.js"></script>
+		<script src="../../lib/vue.js"></script>
+		<script type="text/javascript" src="../../js/Administrator/parameter.js"></script>
+	</body>
+
+</html>

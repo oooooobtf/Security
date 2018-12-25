@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>登录</title>
+		<link rel="stylesheet" href="../../css/com.css" />
+		<link rel="stylesheet" href="../../fonts/7-stroke/7-stroke.css" />
+		<link rel="stylesheet" href="../../fonts/font-awesome/font-awesome.css" />
+		<link rel="stylesheet" href="../../fonts/glyphicons/glyphicons.css" />
+		<link rel="stylesheet" href="../../fonts/ionicons/ionicons.css" />
+		<link rel="stylesheet" href="../../fonts/material-design/material-design.css" />
+		<link rel="stylesheet" href="../../fonts/mfglabs/mfglabs.css" />
+		<link rel="stylesheet" href="../../fonts/octicons/octicons.css" />
+		<link rel="stylesheet" href="../../fonts/open-iconic/open-iconic.css" />
+		<link rel="stylesheet" href="../../fonts/themify/themify.css" />
+		<link rel="stylesheet" href="../../fonts/weather-icons/weather-icons.css" />
+		<link rel="stylesheet" href="../../fonts/web-icons/web-icons.css" />
+		<link rel="stylesheet" href="../../css/login.css?v=20180725" />
+	</head>
+
+	<body>
+		<div class="login">
+			<div class="logo">
+				<div>
+					<img src="../../image/login/logo2.png" />
+				</div>
+				<div class="login-title">
+					<span>登录</span>
+					<span class="login-green">货盾</span>
+					<span class="login-small">货运安检管理系统</span>
+				</div>
+			</div>
+			<div class="logo-panel">
+				<div class="title">
+					<!--<div onclick="loginCut(this,2)" class="active">
+						<span><i><img src="../../image/login/loginicon1_.png" class="faceicon"/></i>人脸登录</span>
+					</div>-->
+					<div onclick="loginCut(this,3)" class="active">
+						<span><i class="icon fa-credit-card" style="margin-right: 4px;"></i>刷卡登录</span>
+					</div>
+					<div onclick="loginCut(this,1)">
+						<span><i><img src="../../image/login/loginicon2.png" class="numbericon"/></i>账号登录</span>
+					</div>
+					
+				</div>
+				<!--人脸登录-->
+				<!--<div class="face-login">
+					<div class="video-canvas clearfix">
+						<div id="webcam" style="margin-top: 14px;" width="320" height="240"></div>
+						<canvas id="canvas" width="320" height="240"></canvas>
+				
+					</div>
+					<div class="face-login-btn" id="faceLogin">
+						<span>拍摄</span>
+					</div>
+				</div>-->
+				<!--人脸登录  end-->
+				<!--刷卡登录-->
+				<div class="slot-card-login">
+					<div class="input-col" style="margin-top: 112px;">
+						<!--<span><img src="../../image/man.png"/></span>-->
+						<input id="cardID" type="password" autofocus="autofocus" class="green" onblur="showTip(this)" onfocus="addGreen(this)"/>
+					</div>
+				</div>
+
+				<!--账号登录-->
+				<div class="account-number-login " style="display: none;">
+					<div class="input-col">
+						<!--<input id="userName" placeholder="请输入账号" onkeyup="this.value=this.value.replace(/\D/g,'')"  onfocus="changeColor(this)" onblur="$(this).removeClass('green')"  oninput ="showicon(this)" autocomplete="off" maxlength="11" />-->
+
+						<input id="userName" placeholder="请输入账号" onfocus="changeColor(this)" onblur="$(this).removeClass('green')" autocomplete="off" maxlength="11" />
+						<!--<i class="icon wb-check check-icon"></i>
+						<i class="icon wb-close close-icon"></i>-->
+						<span class="error-text" style="display: none;">账号不能为空</span>
+					</div>
+					<div class="input-col" style="position: absolute">
+
+						<input type="password" id="pwd" placeholder="请输入密码" onfocus="changeColor(this)" onblur="$(this).removeClass('green')" autocomplete="off" />
+						<!--<i class="icon wb-check check-icon_"></i>
+						<i class="icon wb-close close-icon_"></i>-->
+						<span class="error-text" style="display: none;">密码不能为空</span>
+					</div>
+					<div class="account-number-btn">
+						<span onclick="accountNumberLoing()" style="display: block;">立即登录</span>
+					</div>
+				</div>
+
+				<div class="banquan">
+					Copyright 上海集服电子信息系统有限公司 All rights reserved
+				</div>
+
+			</div>
+		</div>
+
+		<div class="right-pic">
+			<div>
+				<img src="../../image/login/loginpic.png">
+			</div>
+			<div class="right-text">
+				<span>智能货运安检处理</span>
+				<span>通过QCAP SDK采集X光机高清影像，Active X技术显示直播画面、视频回放，智能、准确地把控安检数据。</span>
+			</div>
+			<div>
+				<img src="../../image/login/loginpic1.png">
+			</div>
+			<div>
+				<img src="../../image/login/loginpic2.png">
+			</div>
+		</div>
+
+		<!--登录提示-->
+		<div id="loginHint" class="notice-model">
+			<i class="icon  wb-info-circle"></i>
+			<span></span>
+		</div>
+
+		<script type="text/javascript" src="../../lib/jquery-2.0.1.min.js"></script>
+		<script type="text/javascript" src="../../lib/js/jquery.webcam.min.js"></script>
+		<script type="text/javascript" src="../../js/Utils.js"></script>
+		<script type="text/javascript" src="../../js/Administrator/login.js?v=20180725"></script>
+	</body>
+
+</html>

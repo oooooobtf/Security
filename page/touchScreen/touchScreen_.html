@@ -1,0 +1,374 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<!--<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1, maximum-scale=1">-->
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="HandheldFriendly" content="true">
+		<!--<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">-->
+		<title>触摸屏安检</title>
+		<link rel="stylesheet" href="../../css/com.css" />
+		<link rel="stylesheet" href="../../fonts/7-stroke/7-stroke.css" />
+		<link rel="stylesheet" href="../../fonts/font-awesome/font-awesome.css" />
+		<link rel="stylesheet" href="../../fonts/glyphicons/glyphicons.css" />
+		<link rel="stylesheet" href="../../fonts/ionicons/ionicons.css" />
+		<link rel="stylesheet" href="../../fonts/material-design/material-design.css" />
+		<link rel="stylesheet" href="../../fonts/mfglabs/mfglabs.css" />
+		<link rel="stylesheet" href="../../fonts/octicons/octicons.css" />
+		<link rel="stylesheet" href="../../fonts/open-iconic/open-iconic.css" />
+		<link rel="stylesheet" href="../../fonts/themify/themify.css" />
+		<link rel="stylesheet" href="../../fonts/weather-icons/weather-icons.css" />
+		<link rel="stylesheet" href="../../fonts/web-icons/web-icons.css" />
+		<link rel="stylesheet" href="../../lib/laydate/theme/default/laydate.css" />
+		<link rel="stylesheet" href="../../lib/css/swiper-3.4.2.min.css" />
+		<link rel="stylesheet" href="../../css/touchScreen/touchScreen_.css?v=20180725" />
+		<link rel="stylesheet" href="../../css/com.css" />
+		<link rel="stylesheet" href="../../lib/css/softkeys-0.0.1.css">
+
+	</head>
+
+	<body>
+		<div id="mainContainer">
+			<!--登录提示-->
+			<div id="loginHint" class="notice-model-screen">
+				<div>
+					<i class="icon  wb-info-circle"></i>
+					<span></span>
+				</div>
+			</div>
+
+			<!--头部-->
+			<header>
+				<div class="search-left screen-header">
+					<div class="screen-time" style="display: inline-block;">
+						<span style="font-size: 20px;color: #ffffff;" id="time"></span>
+						<span style="font-size: 16px;color: #7adfb5;" id="date"></span>
+					</div>
+
+					<!--筛选-->
+					<div class="search-right">
+						<div class="search-input flight" onclick="showFlight(this)">
+							<i class="flight-icon"></i>
+							<input id="flightInput" disabled="disabled" placeholder="按航班号查找" type="text" readonly class="flight">
+							<span class="clear-icon" onclick="emptyFilter(this,1)">
+								清除
+							</span>
+						</div>
+						<div class="search-input carrypeople" style="margin-left: 30px;" onclick="showCompany(this)">
+							<i class="user-icon"></i>
+							<input id="carryInput" placeholder="按承运人查找" type="text" readonly="readonly" onclick="$('#searchInput').val('')">
+							<span class="clear-icon" onclick="emptyFilter(this,2)">清除</span>
+						</div>
+						<div class="search-input order" style="margin-left: 30px;">
+							<i class="order-icon"></i>
+							<input id="searchInput" placeholder="按运单号查找" type="text" onkeyup="searchMsgByOrder()">
+							<!--<input id="searchInput" placeholder="按运单号查找" type="text" readonly="readonly" onclick="$('.dialog-key').show();$('#searchInput').val('')">-->
+							<span class="clear-icon" onclick="emptyFilter(this,3)">清除</span>
+						</div>
+
+					</div>
+
+				</div>
+
+				<!--新增运单-->
+				<div class="add-info" onclick="addOrder()">
+					<div>
+						<span class="add-order">扫描运单</span>
+					</div>
+				</div>
+
+				<!--退出登录-->
+				<div class="login-info" onclick="loginOut()">
+					<div class="info-part">
+						<span id="userName" style="font-size: 18px;width: 155px;">Admin</span>
+						<span>
+                        <a style="cursor: pointer;" style="font-size: 18px;">退出登录
+                        <i class="icon fa-sign-out" style="display: block;"></i>
+                        </a>
+                    </span>
+					</div>
+				</div>
+
+			</header>
+
+			<!--航班号筛选弹框-->
+			<div class="pop-up-window dialog-figure">
+				<div class="shadow-window" onclick="$('.dialog-figure').hide();selectflights=[]"></div>
+				<div class="dialog">
+					<div class="dialog-header">
+						<span class="dialog-title">请选择航班号（可多选）</span>
+					</div>
+					<div class="dialog-body" style="overflow-y: scroll;">
+						<div class='flightlist' onclick='checkFlight(this)'>123</div>
+						<!--loading-->
+						<!--<div class="el-loading-mask1">
+							<div class="el-loading-spinner margintop"><i class="icon fa-spinner"></i>
+								<p class="el-loading-text">拼命加载中</p>
+							</div>
+						</div>-->
+						<!--loading结束-->
+					</div>
+					<div class="dialog-footer">
+						<button class="footerbtn" onclick="affirmFlight()">
+                    <span>确认筛选</span>
+                    </button>
+						<button class="deletebtn" onclick="$('.dialog-figure').hide();selectflights=[]">
+                    <span>取消</span>
+                    </button>
+					</div>
+				</div>
+			</div>
+
+			<!--承运人筛选弹框-->
+			<div class="pop-up-window dialog-figure-carry">
+				<div class="shadow-window" onclick="closeCarrySelect()"></div>
+				<div class="dialog">
+					<div class="dialog-header">
+						<span class="dialog-title">请选择承运人（可单选）</span>
+					</div>
+					<div class="dialog-body">
+						<!--loading-->
+						<div class="el-loading-mask1">
+							<div class="el-loading-spinner margintop"><i class="icon fa-spinner"></i>
+								<p class="el-loading-text">拼命加载中</p>
+							</div>
+						</div>
+						<!--loading结束-->
+					</div>
+					<div class="dialog-footer">
+						<button class="footerbtn" onclick="affirmCompany()">
+                    <span>确认</span>
+                    </button>
+						<button class="deletebtn" onclick="closeCarrySelect()">
+                    <span>取消</span>
+                    </button>
+					</div>
+				</div>
+			</div>
+
+			<!-- 提示弹窗-->
+			<div class="pop-up-windows hint-windows hw-delete">
+				<div class="shadow-window" onclick="$('.hint-windows').hide()"></div>
+				<div class="vertical-center success">
+					<div class="title">
+						<i class="icon wb-bell hint-icon"></i>
+						<!--你确定删除该订单？-->
+						<span id="deletHint"></span>
+						<i class="icon wb-close close-pop" onclick="$('.hint-windows').hide()"></i>
+					</div>
+					<div class="pop-button">
+						<span class="confirm-btn" onclick="confirmDeleteOrder()">确定</span>
+						<span class="cancle-btn" onclick="$('.hint-windows').hide()">取消</span>
+					</div>
+				</div>
+			</div>
+			<!-- 提示弹窗  end-->
+
+			<!--新增运单弹窗-->
+			<div class="pop-up-windows edit-windows addorder">
+				<div class="shadow-window" onclick="cancelOrder()"></div>
+				<div class="pop-up-vertical-center pop-content" style="width:38%;top: 102px;border-radius: 5px;">
+					<div class="title">
+						<span style="font-size: 18px;">扫描运单</span>
+						<i class="icon wb-close" style="float: right;cursor: pointer;" onclick="cancelOrder()"></i>
+
+					</div>
+					<div class="pop-body" style="padding-left: 5%;padding-top: 20px;height: 110px;">
+						<form name="form" id="orderForm">
+							<div class="pop-col" style="margin-top: 20px;">
+								<!--<div style="width: auto;margin-top: 20px;">-->
+									<span class="big">条形码</span>
+									<input class="add-input marginleft" id="code" onkeydown="if(event.keyCode==13)return" onblur="$(this).focus()" style="width: 70%" maxlength="12" autocomplete="off" name="code" />
+									<!--<input class="add-input marginleft"  onfocus="showKeybored(1)" onclick="getTxt1CursorPosition('orderno')"   id="orderno" v-model="orderNo" style="width: 450px;" maxlength="12" autocomplete="off" name="orderNo" onkeyup="verifyFrom(this)" />-->
+									<span class="error-hinttext">输入条形码</span>
+								<!--</div>-->
+							</div>
+						</form>
+					</div>
+
+					<!--<div class="popfooter">
+						<div class="submitbtn" onclick="postOrder()">提交</div>
+						<div class="cancelbtn" onclick="cancelOrder()">取消 </div>
+					</div>-->
+				</div>
+
+				<div id="key">
+					<div class="closekey" onclick="$('#key').hide();$('#keycontent').html('')">
+						关闭键盘
+					</div>
+					<div id="keycontent">
+
+					</div>
+					<!--虚拟键盘-->
+					<!--<div class="softkeys" id="softKey" data-target="input[name='orderNo']">
+
+				    </div>-->
+				</div>
+
+			</div>
+
+			<!--数字键盘-->
+			<div class="pop-up-window dialog-key">
+				<div class="shadow-window-key" onclick="$('.dialog-key').hide()"></div>
+				<div class="dialog-alert-key">
+					<table class="key-table">
+						<thead>
+						</thead>
+						<tbody style="width: 25%;">
+							<tr>
+								<td onclick="tapKey(0)">
+									<div class="key"><span>0</span></div>
+								</td>
+								<td onclick="tapKey(1)">
+									<div class="key"><span>1</span></div>
+								</td>
+								<td onclick="tapKey(2)">
+									<div class="key"><span>2</span></div>
+								</td>
+							</tr>
+							<tr>
+								<td onclick="tapKey(3)">
+									<div class="key"><span>3</span></div>
+								</td>
+								<td onclick="tapKey(4)">
+									<div class="key"><span>4</span></div>
+								</td>
+								<td onclick="tapKey(5)">
+									<div class="key"><span>5</span></div>
+								</td>
+							</tr>
+							<tr>
+								<td onclick="tapKey(6)">
+									<div class="key"><span>6</span></div>
+								</td>
+								<td onclick="tapKey(7)">
+									<div class="key"><span>7</span></div>
+								</td>
+								<td onclick="tapKey(8)">
+									<div class="key"><span>8</span></div>
+								</td>
+							</tr>
+							<tr>
+								<td onclick="tapKey(9)">
+									<div class="key"><span>9</span></div>
+								</td>
+								<td onclick="tapKey('确认')">
+									<div class="key sure"><span>确认</span></div>
+								</td>
+								<td onclick="tapKey('删除')" class="delete">
+									<div class="key dele"></div>
+								</td>
+
+							</tr>
+						</tbody>
+					</table>
+
+				</div>
+			</div>
+
+			<section class="scene-content" id="sceneContent" v-cloak>
+				<div class="el-loading-mask" style="top: 126px;display: none;">
+					<div class="el-loading-spinner" style="font-size: 33px;"><i class="icon fa-spinner"></i>
+						<p class="el-loading-text" style="font-size: 33px;">拼命加载中</p>
+					</div>
+				</div>
+				<!--运单-->
+				<div id="allOrder">
+					<div :class="compareColor(item.status)" v-for="item in items" @click="gotoDetail(item)">
+						<div class="blue-ball" v-show="item.status==2">
+
+						</div>
+						<div class="order-title">
+							{{item.orderId}}
+							<div style="background-color:#cccccc;margin-top: 20px;height: 3px;"></div>
+						</div>
+
+						<div class="order-text">
+							<div class="order-text-left">
+								<span class="order-flight">{{item.flightId}}</span>
+								<span class="order-count">{{item.num}}件</span>
+								<span class="order-company">{{item.carryPerson}}</span>
+							</div>
+							<div class="order-text-right " v-if="item.status==0">
+							</div>
+							<template v-else>
+								<div class="order-text-right playcolor" v-if="item.status==2">
+									正在安检
+								</div>
+								<div class="order-text-right stopcolor" v-else>
+									安检暂停
+								</div>
+							</template>
+						</div>
+
+					</div>
+
+				</div>
+
+				<!--<div class="order-play stop">
+           	  <div class="order-title">
+           	  	880-87654321
+           	  </div>
+           	  <div class="order-text">
+           	  	<div class="order-text-left">
+           	  		<span class="order-flight">MH520</span>
+           	  		<span class="order-count">15件</span>
+           	  		<span class="order-company">中国航空有限公司</span>
+           	  	</div>
+           	  	<div class="order-text-right stopcolor">
+           	  		正在安检
+           	  	</div>
+           	  </div>
+           	  
+           </div>-->
+
+				<!--<div class="order-play default">
+           	  <div class="order-title">
+           	  	880-87654321
+           	  </div>
+           	  <div class="order-text">
+           	  	<div class="order-text-left">
+           	  		<span class="order-flight">MH520</span>
+           	  		<span class="order-count">15件</span>
+           	  		<span class="order-company">中国航空有限公司</span>
+           	  	</div>
+           	  
+           	  </div>
+           	  
+           </div>-->
+
+				<!--页码-->
+				<!--<footer class="footer-page">
+					<div :class="comparePage(list.currentPage,index)" v-for="(pages,index) in list.totalPage" @click="changePage(index+1)">
+						{{index+1}}
+					</div>
+				</footer>-->
+				<div class="row-floor" >
+					<div class="footer clearfix">
+						<div class="fl" style="margin-left: 8px;">共{{total}}项</div>
+						<div id="paging" class="fr"></div>
+					</div>
+				</div>
+
+			</section>
+
+		</div>
+		<script type="text/javascript" src="../../lib/jquery-2.0.1.min.js"></script>
+		<script type="text/javascript" src="../../js/Utils.js"></script>
+		<script type="text/javascript" src="../../lib/vue.js"></script>
+		<script type="text/javascript" src="../../lib/laydate/laydate.js"></script>
+		<script type="text/javascript" src="../../lib/yfslPageControl.js"></script>
+		<script type="text/javascript" src="../../lib/bootstrap.js"></script>
+		<script type="text/javascript" src="../../js/touchScreen/touchScreen_.js?v=20180725"></script>
+		<script type="text/javascript" src="../../lib/swiper-3.4.2.min.js"></script>
+		<script type="text/javascript" src="../../lib/js/stomp.min.js"></script>
+		<script type="text/javascript" src="../../lib/js/sockjs.min.js"></script>
+		<script type="text/javascript" src="../../lib/softkeys-0.0.1.js"></script>
+		<script type="text/javascript" src="../../js/com.js"></script>
+
+	</body>
+
+</html>

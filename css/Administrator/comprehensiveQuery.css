@@ -1,0 +1,547 @@
+[v-cloak] {
+    display: block;
+}
+input:not([type]):disabled{
+    background: #fff;
+    cursor: pointer;
+}
+.main{
+    margin-left: 200px;
+    min-height: calc(100vh - 60px);
+    top: 60px;
+    position: relative;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    -ms-flex-preferred-size: auto;
+    flex-basis: auto;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 20px;
+}
+.username>span{
+    display: inline-block;
+    vertical-align: top;
+}
+.row{
+    display: block;
+    width:100%;
+
+}
+.panel{
+    background-color: #ffffff;
+    border-top: 5px solid #e7eaec;
+    border-radius: 3px;
+}
+.panel-header{
+    position: relative;
+    padding: 0;
+    border-bottom: 1px solid #e4eaec;
+}
+.panel-title{
+    display: block;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 14px;
+    color: #37474f;
+}
+.panel-body{
+    margin-top: 15px;
+    padding: 0 15px;
+    height: 35px;
+    padding-bottom: 15px;
+    font-size: 0;
+}
+.panel-body>div{
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+}
+.selectG-box,
+.selectR-box{
+    width: 240px;
+}
+
+.selectR-box>span,
+.selectG-box>span{
+    display: inline-block;
+    vertical-align: middle;
+    width: 42px;
+}
+/*状态*/
+.panel-body>.search-left>.state-list>span>i{
+    opacity: 0;
+}
+.state-list>span{
+    width: 64px;
+}
+
+
+
+/*日期选择*/
+.time-control{
+    margin: 0 19% 0 1%;
+}
+.time-container{
+    position: relative;
+    line-height: 32px;
+}
+.overtime-icon,
+.time-icon{
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.time-container>span{
+    width: 38px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    display: inline-block;
+    background: #e4eaec;
+    color: #999999;
+}
+.time-icon{
+    left: 0;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+.overtime-icon{
+    right: 0;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    cursor: pointer;
+}
+.time-input{
+    width: 290px;
+    height: 30px;
+    border: 1px solid #e8edef;
+    border-radius: 3px;
+    outline: none;
+    padding: 0;
+    text-indent: 40px;
+    padding-left: 5px;
+    vertical-align: top;
+}
+
+/*搜索*/
+.search{
+    position: relative;
+}
+.search-input{
+    width: 250px;
+}
+.search-icon{
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    cursor: pointer;
+    background: #fff;
+    color: #c0c4cc;
+}
+.input{
+    -webkit-appearance: none;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #dcdfe6;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #606266;
+    display: inline-block;
+    font-size: inherit;
+    height: 40px;
+    line-height: 1;
+    outline: 0;
+    padding: 0 15px;
+    -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    width: 100%;
+    height: 32px;
+    border-radius: 3px;
+    vertical-align: middle;
+}
+
+
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #dcdfe6; opacity:1;
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #dcdfe6;opacity:1;
+}
+
+input:-ms-input-placeholder{
+    color: #dcdfe6;opacity:1;
+}
+
+input::-webkit-input-placeholder{
+    color: #dcdfe6;opacity:1;
+}
+
+.table-container{
+    border-top: 5px solid #e7eaec;
+    background: #fff;
+    margin-top: 20px;
+    border-radius: 3px;
+    min-height: 500px;
+}
+.table-box{
+    color: #76838f;
+    width: 100%;
+}
+.table-title{
+    color: #263638;
+    background-color: #ffffff !important;
+}
+table.table-box{
+    border-collapse: collapse;
+    display: table;
+    border-spacing: 2px;
+    border-color: grey;
+    text-align: left;
+    /* 表格单元格溢出省略号 */
+    table-layout: fixed;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+table.table-box>thead>tr>th,
+table.table-box>tbody>tr>td{
+    border: 1px solid #e4eaec;
+    padding: 5px 17px;
+    height: 37px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+table.table-box>thead>tr>th{
+    font-weight: bold;
+    height: 36px;
+}
+table.table-box>thead>tr>th:not(:nth-child(2)),
+table.table-box>tbody>tr>td:not(:nth-child(2)){
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.channelIP{
+    font-size: 0;
+}
+.channelIP>span{
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 12px;
+
+}
+.channelIP>span:first-child{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    max-width: 70%;
+    margin-right: 5px;
+}
+table.table-box>tbody>tr>td>i{
+    cursor: pointer;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+.channelIP>span:last-child{
+    color: #ffffff;
+    border-radius: 3px;
+    font-size: 12px;
+    text-align: center;
+    padding: 1px 5px;
+}
+.unnormal{
+    background-color: #F2A654;
+}
+.normal{
+    background-color: #57C7D4;
+}
+
+.row-floor{
+    background-color: rgb(255, 255, 255);
+    padding: 20px 10px;
+}
+
+.btn:hover {
+    background-color: #e4eaec;
+    color: #606266;
+    border: 1px solid #e4eaec;
+}
+/*.input:focus {
+    border-color: #409EFF;
+    outline: 0;
+}*/
+.focus{
+    border-color: #409EFF;
+    outline: 0;
+}
+.edit-windows,.hint-windows,.blockw,.reset{
+    display: none;
+}
+
+/*下拉*/
+.pop-select{
+    width: 163px;
+    height: 32px;
+    border-radius: 3px;
+    border: solid 1px #dddddd;
+    vertical-align: middle;
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.pop-input-box{
+    box-sizing: border-box;
+}
+.select-icon{
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+}
+.select-icon>i{
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+.pop-ul{
+    position: absolute;
+    list-style: none;
+    z-index: 100;
+    margin: 0;
+    padding:0;
+    margin-top: 4px;
+    width: 162px;
+    margin-left: 45px;
+    border-radius: 3px;
+    border: solid 1px #cccccc;
+    background-color: #FFFFFF;
+    transition: all .3s;
+    display: none;
+    max-height: 200px;
+    overflow-y: scroll;
+}
+.pop-ul li{
+    /*padding: 5px 0 0 10px;*/
+    padding: 10px;
+    cursor: pointer;
+}
+.pop-ul li:hover{
+    background-color: #ccd5db;
+}
+.pop-select input{
+    height: 30px;
+    width: 100%;
+    font-size: 14px;
+    color: #666666;
+    padding-left: 10px;
+    border: none;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    vertical-align: top;
+}
+div>span .select-icon {
+    display: inline-block;
+    width: 18px;
+    height: 30px;
+    line-height: 28px;
+    text-align: center;
+    vertical-align: top;
+    color: #c1c1c1;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    cursor: pointer;
+}
+.pop-menu{
+    list-style: none;
+}
+
+.table-see>span{
+	font-size: 13px;
+    display: inline-block;
+    background: #62a8ea;
+    color: #fff;
+    border-radius: 3px;
+    padding: 2px 10px;
+    cursor: pointer;
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -ms-transition: all .3s;
+    -o-transition: all .3s;
+    transition: all .3s;
+}
+.table-see>span:hover{
+    background: #89bceb;
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -ms-transition: all .3s;
+    -o-transition: all .3s;
+    transition: all .3s;
+}
+/*兼容屏幕分辨率*/
+@media screen and  (min-width: 1366px ) and (max-width: 1440px){
+    .selectR-box>span, .selectG-box>span{
+        width: 36px;
+    }
+    .pop-ul{
+        margin-left: 38px;
+    }
+    .panel-body>div{
+        font-size: 12px;
+    }
+    .time-control{
+        margin: 0 6% 0 1%;
+    }
+    .color-content{
+        width: 270px;
+    }
+    .time-input{
+        width: 170px;
+    }
+
+    .selectR-box,
+    .selectG-box{
+        width: 180px;
+    }
+    .selectR-box{
+        margin: 0 5px;
+    }
+    .search-input{
+        width: 180px;
+    }
+    .pop-select{
+        width: 140px;
+    }
+    .selectG-box .pop-select{
+        width: 130px;
+    }
+    .input{
+        padding: 0 5px;
+    }
+    .table-see>span{
+        padding: 2px;
+    }
+    .channelIP>span:first-child{
+        max-width: 53%;
+    }
+}
+
+@media screen and  (min-width: 1441px ) and (max-width: 1660px){
+    .selectR-box>span, .selectG-box>span{
+        width: 36px;
+    }
+    .pop-ul{
+        margin-left: 38px;
+    }
+    .panel-body>div{
+        font-size: 12px;
+    }
+    .time-control{
+        margin: 0 6% 0 1%;
+    }
+    .color-content{
+        width: 270px;
+    }
+    .time-input{
+        width: 200px;
+    }
+
+    .selectR-box,
+    .selectG-box{
+        width: 200px;
+    }
+    .selectR-box{
+        margin: 0 5px;
+    }
+    .search-input{
+        width: 200px;
+    }
+    .pop-select{
+        width: 150px;
+    }
+    .selectG-box .pop-select{
+        width: 150px;
+    }
+    .input{
+        padding: 0 5px;
+    }
+    .table-see>span{
+        padding: 2px 4px;
+    }
+    .channelIP>span:first-child{
+        max-width: 55%;
+    }
+}
+
+@media screen and  (min-width: 1661px ) and (max-width: 1919px){
+    .panel-body>div{
+        font-size: 12px;
+    }
+    .time-control{
+        margin: 0 9% 0 1%;
+    }
+    .color-content{
+        width: 270px;
+    }
+    .time-input{
+        width: 250px;
+    }
+
+    .selectR-box,
+    .selectG-box{
+        width: 250px;
+    }
+    .selectR-box{
+        margin: 0 5px;
+    }
+    .search-input{
+        width: 200px;
+    }
+    .pop-select{
+        width: 190px;
+    }
+    .selectG-box .pop-select{
+        width: 180px;
+    }
+    .input{
+        padding: 0 5px;
+    }
+    .table-see>span{
+        padding: 2px 8px;
+    }
+    .channelIP>span:first-child{
+        max-width: 64%;
+    }
+}
+
+.time-span{
+	float: left;
+	display: inline-block !important;
+    width: 150px !important;
+    position: absolute !important;
+    margin-left: 45px;
+    color: #dcdfe6;
+    text-align: left !important;
+    background:none !important;
+}

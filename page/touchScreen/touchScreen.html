@@ -1,0 +1,455 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1, maximum-scale=1">-->
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="true">
+    <!--<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">-->
+    <title>触摸屏安检</title>
+    <link rel="stylesheet" href="../../css/com.css"/>
+    <link rel="stylesheet" href="../../fonts/7-stroke/7-stroke.css"/>
+    <link rel="stylesheet" href="../../fonts/font-awesome/font-awesome.css"/>
+    <link rel="stylesheet" href="../../fonts/glyphicons/glyphicons.css"/>
+    <link rel="stylesheet" href="../../fonts/ionicons/ionicons.css"/>
+    <link rel="stylesheet" href="../../fonts/material-design/material-design.css"/>
+    <link rel="stylesheet" href="../../fonts/mfglabs/mfglabs.css"/>
+    <link rel="stylesheet" href="../../fonts/octicons/octicons.css"/>
+    <link rel="stylesheet" href="../../fonts/open-iconic/open-iconic.css"/>
+    <link rel="stylesheet" href="../../fonts/themify/themify.css"/>
+    <link rel="stylesheet" href="../../fonts/weather-icons/weather-icons.css"/>
+    <link rel="stylesheet" href="../../fonts/web-icons/web-icons.css"/>
+    <link rel="stylesheet" href="../../lib/laydate/theme/default/laydate.css"/>
+    <link rel="stylesheet" href="../../lib/css/swiper-3.4.2.min.css"/>
+    <link rel="stylesheet" href="../../css/touchScreen/touchScreen.css"/>
+    <link rel="stylesheet" href="../../css/com.css"/>
+
+</head>
+<body>
+	<!--登录提示-->
+			<div id="loginHint" class="notice-model">
+				<i class="icon  wb-info-circle"></i>
+				<span></span>
+			</div>
+<!--头部-->
+<header class="screen-header">
+    <div class="screen-logo"></div>
+    <div class="search-left">
+        <div class="time-control">
+            <div class="time-container">
+                <span class="time-icon"><i class="iconmar icon wb-calendar"></i></span>
+                <span class="time-span" onclick="changelaydate()">请选择日期</span>
+                <input id="screenTime" type="text" class="time-input" >
+                <span class="overtime-icon" onclick="emptyTime()"><i class="iconmar icon wb-close"></i></span>
+            </div>
+        </div>
+        <div class="select-day" onclick="selectDay()">
+          <span>
+            <i class="opacity"></i>
+            <a>前天</a>
+          </span>
+        </div>
+    </div>
+    <!--筛选航班号-->
+    <div class="search-right">
+        <div class="search-input" onclick="showFlight(this)">
+            <i class="icon wb-list"></i>
+           
+            <input id="flightInput" disabled="disabled" placeholder="请选择航班号" type="text" readonly class="flight">
+            <i class="iconmar icon wb-close" style="" onclick="emptyFlight(this)"></i>
+        </div>
+        <div class="search-input right">
+            <i class="icon fa-search"></i>
+            <input id="searchInput" placeholder="按承运人前缀、运单号查询" type="text" readonly="readonly"
+                   onclick="$('.dialog-key').show();$('#searchInput').val('')">
+            <i class="iconmar icon wb-close" onclick="$('#searchInput').val('');conditions='';findByConditions()"></i>
+        </div>
+        <div class="login-info" onclick="loginout()">
+            <div class="info-part">
+                <span id="userName">Admin</span>
+                <span>
+            <a style="cursor: pointer;" >退出登录
+            <i class="icon fa-sign-out"></i>
+            </a>
+          </span>
+            </div>
+        </div>
+    </div>
+</header>
+<!--航班号筛选弹框-->
+<div class="pop-up-window dialog-figure">
+    <div class="shadow-window" onclick="$('.dialog-figure').hide();selectflights=[]"></div>
+    <div class="dialog">
+        <div class="dialog-header">
+            <span class="dialog-title">请选择航班号</span>
+            <i class="icon wb-close dialog-closebtn" onclick="$('.dialog-figure').hide();selectflights=[]"></i>
+        </div>
+        <div class="dialog-body">
+            <!--loading-->
+            <div class="el-loading-mask1">
+                <div class="el-loading-spinner"><i class="icon fa-spinner"></i>
+                    <p class="el-loading-text">拼命加载中</p></div>
+            </div>
+            <!--loading结束-->
+        </div>
+        <div class="dialog-footer">
+            <button class="footerbtn" onclick="affirmFlight()">
+                <span>确认筛选</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!--订单进行中提示框-->
+<div class="pop-up-window dialog-figure-go">
+    <div class="shadow-window" onclick="$('.dialog-figure-go').hide()"></div>
+    <div class="dialog-alert">
+        <div class="dialog-header-alert">
+            <i class="icon wb-bell dialog-closebtn-alert" onclick="$('.dialog-figure-go').hide()"></i>
+            提示信息
+        </div>
+        <div class="dialog-body-alert">
+            <h3>有订单在进行中，必须暂停或结束当前正在安检的运单后，才可以开始下一单！</h3>
+        </div>
+        <div class="dialog-footer-go">
+            <button class="affirmbtn" onclick="$('.dialog-figure-go').hide()">
+                <span>确认</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!--数字键盘-->
+<div class="pop-up-window dialog-key">
+    <div class="shadow-window-key" onclick="$('.dialog-key').hide()"></div>
+    <div class="dialog-alert-key">
+        <table class="key-table">
+            <thead>
+            </thead>
+            <tbody style="width: 25%;">
+            <tr>
+                <td onclick="tapKey(0)"><div class="key"><span>0</span></div></td>
+                <td onclick="tapKey(1)"><div class="key"><span>1</span></div></td>
+                <td onclick="tapKey(2)"><div class="key"><span>2</span></div></td>
+            </tr>
+            <tr>
+                <td onclick="tapKey(3)"><div class="key"><span>3</span></div></td>
+                <td onclick="tapKey(4)"><div class="key"><span>4</span></div></td>
+                <td onclick="tapKey(5)"><div class="key"><span>5</span></div></td>
+            </tr>
+            <tr>
+                <td onclick="tapKey(6)"><div class="key"><span>6</span></div></td>
+                <td onclick="tapKey(7)"><div class="key"><span>7</span></div></td>
+                <td onclick="tapKey(8)"><div class="key"><span>8</span></div></td>
+            </tr>
+            <tr>
+                <td onclick="tapKey(9)"><div class="key"><span>9</span></div></td>
+                <td onclick="tapKey('确认')"><div class="key sure"><span>确认</span></div></td>
+                <td onclick="tapKey('删除')" class="delete"><div class="key dele"></div></td>
+
+            </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+</div>
+
+<!--图片预览-->
+<div class="pop-up-window edit-windows img-preview">
+    <div class="shadow-window" onclick="$('.img-preview').hide()"></div>
+    <div class="pop-up-vertical-center pop-content" style="width: 50%;">
+        <div class="title">
+            <span>图片预览</span>
+            <span class="icon pe-close" onclick="$('.img-preview').hide()"></span>
+        </div>
+        <div class="pop-body" style="max-height: 650px;overflow-y: scroll;">
+            <img src="" id="imgPreview" onclick="$('.img-preview').hide()"/>
+        </div>
+    </div>
+</div>
+<!--图片预览  end-->
+
+<!--结束弹框-->
+<div class="pop-up-window dialog-figure-alert">
+    <div class="shadow-window" onclick="$('.dialog-figure-alert').hide()"></div>
+    <div class="dialog-alert">
+        <div class="dialog-header-alert">
+            <i class="icon wb-bell dialog-closebtn-alert" onclick="$('.dialog-figure-alert').hide()"></i>
+            提示信息
+        </div>
+        <div class="dialog-body-alert">
+            <h3>该运单将从界面上消失，确定结束安检？</h3>
+        </div>
+        <div class="dialog-footer-alert">
+            <button class="affirmbtn" onclick="endSecurity()">
+                <span>确认</span>
+            </button>
+            <button class="cancelbtn" onclick="$('.dialog-figure-alert').hide()">
+                <span>取消</span>
+            </button>
+        </div>
+    </div>
+</div>
+<!---->
+
+
+<section class="scene-content" id="sceneContent">
+    <div class="el-loading-mask">
+        <div class="el-loading-spinner"><i class="icon fa-spinner"></i>
+            <p class="el-loading-text">拼命加载中</p></div>
+    </div>
+    <div class="swiper-container bigswiper">
+        <div class="swiper-wrapper" id="mainContent">
+
+        </div>
+        <div class="swiper-button-prev" style="background-image:none;top: 149px"><img src="../../image/touchScreen/left-s.png"></div>
+        <div class="swiper-button-next" style="background-image:none;right: 60px;top: 149px"><img src="../../image/touchScreen/right-s.png"></div>
+    </div>
+
+    <!--等待安检初始化状态-->
+    <!--<div class="waybill waybill-wait">-->
+
+    <!--</div>-->
+
+    <!--安检中状态-->
+    <!--<div class="waybill waybill-proceed">-->
+    <!--&lt;!&ndash;运单头部&ndash;&gt;-->
+    <!--<div class="way-head">-->
+    <!--<i class="circle cir-orange"></i>-->
+    <!--<div class="one-tier">-->
+    <!--<h4 class="way-tit black-tit">运单号 1231</h4>-->
+    <!--<span class="label green">件数：456465</span>-->
+    <!--</div>-->
+    <!--<p class="two-tier">-->
+    <!--<span class="status wait-gray">安检进行中...</span>-->
+    <!--<span class="gray-tit creat-time">创建时间：-->
+    <!--<i class="black time-font">2014-11-21</i>-->
+    <!--</span>-->
+    <!--</p>-->
+    <!--</div>-->
+    <!--&lt;!&ndash;运单流程&ndash;&gt;-->
+    <!--<div class="way-content">-->
+    <!--<div class="way-list">-->
+    <!--<ul>-->
+    <!--<li><p class="gray-tit">航班号 <span class="black gap">MH12345</span></p>-->
+    <!--</li>-->
+    <!--<li><p class="gray-tit">承运人 <span class="black gap">1458</span></p>-->
+    <!--</li>-->
+    <!--<li><p class="gray-tit">通道号 <span class="black gap">通道1号</span></p>-->
+    <!--</li>-->
+    <!--<li><p class="gray-tit">代理人 <span class="black gap">小黑</span></p>-->
+    <!--</li>-->
+    <!--</ul>-->
+    <!--<div class="way-plan">-->
+    <!--<div class="plan-part">-->
+    <!--<p class="plan-node">-->
+    <!--<i class="spot green-spot"></i>-->
+    <!--<span class="gray-tit" style="margin-right: 16px;">运单开始时间</span>-->
+    <!--<span class="black">2014-11-12</span>-->
+    <!--</p>-->
+    <!--<p class="plan-node">-->
+    <!--<i class="spot red-spot"></i>-->
+    <!--<span class="gray-tit" style="margin-right: 16px;">最近暂停时间</span>-->
+    <!--<span class="black">2018-11-12</span>-->
+    <!--</p>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--&lt;!&ndash;相关图片&ndash;&gt;-->
+    <!--<div class="relation-img">-->
+    <!--<p class="gray-tit">相关图片</p>-->
+    <!--<div class="img-list">-->
+    <!--<div class="swiper-container">-->
+    <!--<div class="swiper-wrapper" style="height: 100px;">-->
+    <!--<div class="swiper-slide" style="width: 150px">-->
+    <!--<img src="../../image/header_bg.png" width="90%"-->
+    <!--style="border-radius: 5px;height: 100px;">-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<div class="swiper-button-next"></div>-->
+    <!--<div class="swiper-button-prev"></div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="hint">-->
+    <!--<div class="hint-content">-->
+    <!--<p class="hint-tit"><i class="hint-icon"></i>提示</p>-->
+    <!--<p class="hint-txt">-->
+    <!--将货物按照规范搬到传送带上，并开启传送带开关必须结束当前正在安检的运单后，才可以开始下一单-->
+    <!--</p>-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="way-footer">-->
+    <!--<div class="switch"><span>暂停</span></div>-->
+    <!--<div class="footer-btn fot-orange" onclick="showDialogAlert()">结束安检</div>-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <!--&lt;!&ndash;暂停安检状态&ndash;&gt;-->
+    <!--<div class="waybill waybill-wait">-->
+    <!--&lt;!&ndash;运单头部&ndash;&gt;-->
+    <!--<div class="way-head">-->
+    <!--<i class="circle cir-blue"></i>-->
+    <!--<div class="one-tier">-->
+    <!--<h4 class="way-tit black-tit">运单号 1231</h4>-->
+    <!--<span class="label green">件数：456465</span>-->
+    <!--</div>-->
+    <!--<p class="two-tier">-->
+    <!--<span class="status wait-gray">等待安检...</span>-->
+    <!--<span class="gray-tit creat-time">创建时间：-->
+    <!--<i class="black time-font">2014-11-21</i>-->
+    <!--</span>-->
+    <!--</p>-->
+    <!--</div>-->
+    <!--&lt;!&ndash;运单流程&ndash;&gt;-->
+    <!--<div class="way-content">-->
+    <!--<div class="way-list">-->
+    <!--<ul>-->
+    <!--<li><p class="gray-tit">航班号 <span class="black gap">MH12345</span></p>-->
+    <!--</li>-->
+    <!--<li><p class="gray-tit">承运人 <span class="black gap">1458</span></p>-->
+    <!--</li>-->
+    <!--<li><p class="gray-tit">通道号 <span class="black gap">通道1号</span></p>-->
+    <!--</li>-->
+    <!--<li><p class="gray-tit">代理人 <span class="black gap">小黑</span></p>-->
+    <!--</li>-->
+    <!--</ul>-->
+    <!--<div class="way-plan">-->
+    <!--<div class="plan-part">-->
+    <!--<p class="plan-node">-->
+    <!--<i class="spot green-spot"></i>-->
+    <!--<span class="gray-tit" style="margin-right: 16px;">运单开始时间</span>-->
+    <!--<span class="black">2014-11-12</span>-->
+    <!--</p>-->
+    <!--<p class="plan-node">-->
+    <!--<i class="spot red-spot"></i>-->
+    <!--<span class="gray-tit" style="margin-right: 16px;">最近暂停时间</span>-->
+    <!--<span class="black">2018-11-12</span>-->
+    <!--</p>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--&lt;!&ndash;相关图片&ndash;&gt;-->
+    <!--<div class="relation-img">-->
+    <!--<p class="gray-tit">相关图片</p>-->
+    <!--<div class="img-list">-->
+    <!--<div class="swiper-container">-->
+    <!--<div class="swiper-wrapper" style="height: 100px;">-->
+    <!--<div class="swiper-slide" style="width: 150px">-->
+    <!--<img src="../../image/header_bg.png" width="90%"-->
+    <!--style="border-radius: 5px;height: 100px;">-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<div class="swiper-button-next"></div>-->
+    <!--<div class="swiper-button-prev"></div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="hint">-->
+
+    <!--</div>-->
+
+    <!--<div class="way-footer">-->
+    <!--<div class="orange-switch" onclick="showDialogAlertGo()"><span>开始</span></div>-->
+    <!--<div class="footer-btn fot-gray">结束安检</div>-->
+    <!--</div>-->
+    <!--</div>-->
+
+
+    <!--灰色等待安检状态-->
+    <!--<div class="waybill waybill-gray">-->
+    <!--&lt;!&ndash;运单头部&ndash;&gt;-->
+    <!--<div class="way-head">-->
+    <!--<i class="circle cir-gray"></i>-->
+    <!--<div class="one-tier">-->
+    <!--<h4 class="way-tit black-tit">运单号 1231</h4>-->
+    <!--<span class="label green">件数：456465</span>-->
+    <!--</div>-->
+    <!--<p class="two-tier">-->
+    <!--<span class="status wait-gray">等待安检...</span>-->
+    <!--<span class="gray-tit creat-time">创建时间：-->
+    <!--<i class="black time-font">2014-11-21</i>-->
+    <!--</span>-->
+    <!--</p>-->
+    <!--</div>-->
+    <!--&lt;!&ndash;运单流程&ndash;&gt;-->
+    <!--<div class="way-content">-->
+    <!--<div class="way-list">-->
+    <!--<ul>-->
+    <!--<li><p class="gray-tit">航班号 <span class="black gap">MH12345</span></p>-->
+    <!--</li>-->
+    <!--<li><p class="gray-tit">承运人 <span class="black gap">1458</span></p>-->
+    <!--</li>-->
+    <!--<li><p class="gray-tit">通道号 <span class="black gap">通道1号</span></p>-->
+    <!--</li>-->
+    <!--<li><p class="gray-tit">代理人 <span class="black gap">小黑</span></p>-->
+    <!--</li>-->
+    <!--</ul>-->
+    <!--<div class="way-plan">-->
+    <!--<div class="plan-part">-->
+    <!--<p class="plan-node">-->
+    <!--<i class="spot green-spot"></i>-->
+    <!--<span class="gray-tit" style="margin-right: 16px;">运单开始时间</span>-->
+    <!--<span class="black">2014-11-12</span>-->
+    <!--</p>-->
+    <!--<p class="plan-node">-->
+    <!--<i class="spot red-spot"></i>-->
+    <!--<span class="gray-tit" style="margin-right: 16px;">最近暂停时间</span>-->
+    <!--<span class="black">2018-11-12</span>-->
+    <!--</p>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--&lt;!&ndash;相关图片&ndash;&gt;-->
+    <!--<div class="relation-img">-->
+    <!--<p class="gray-tit">相关图片</p>-->
+    <!--<div class="img-list">-->
+    <!--<div class="swiper-container">-->
+    <!--<div class="swiper-wrapper" style="height: 100px;">-->
+    <!--<div class="swiper-slide" style="width: 150px">-->
+    <!--<img src="../../image/header_bg.png" width="90%"-->
+    <!--style="border-radius: 5px;height: 100px;">-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<div class="swiper-button-next"></div>-->
+    <!--<div class="swiper-button-prev"></div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--&lt;!&ndash;开始安检后才显示提示&ndash;&gt;-->
+    <!--<div class="hint">-->
+
+    <!--</div>-->
+    <!--&lt;!&ndash;没有单子在安检，初始状态&ndash;&gt;-->
+    <!--<div class="way-footer">-->
+    <!--<div class="start-btn fot-gray">开始安检</div>-->
+    <!--</div>-->
+    <!--</div>-->
+
+</section>
+<!--<div class="left-button" onclick="leftMove()"><img src="../../image/left.png"/></div>
+<div class="right-button" onclick="rightMove()"><img src="../../image/right.png"/></div>-->
+<script type="text/javascript" src="../../lib/jquery-2.0.1.min.js"></script>
+<script type="text/javascript" src="../../lib/laydate/laydate.js"></script>
+<script type="text/javascript" src="../../lib/yfslPageControl.js"></script>
+<script type="text/javascript" src="../../lib/bootstrap.js"></script>
+<script type="text/javascript" src="../../js/touchScreen/touchScreen.js"></script>
+<script type="text/javascript" src="../../lib/swiper-3.4.2.min.js"></script>
+<script type="text/javascript" src="../../lib/js/stomp.min.js"></script>
+<script type="text/javascript" src="../../lib/js/sockjs.min.js"></script>
+<!--<script type="text/javascript" src="../../lib/js/server.js"></script>-->
+<script type="text/javascript" src="../../js/Utils.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>通道状态监控</title>
+		<link rel="stylesheet" href="../../css/com.css" />
+		<link rel="stylesheet" href="../../fonts/7-stroke/7-stroke.css" />
+		<link rel="stylesheet" href="../../fonts/font-awesome/font-awesome.css" />
+		<link rel="stylesheet" href="../../fonts/glyphicons/glyphicons.css" />
+		<link rel="stylesheet" href="../../fonts/ionicons/ionicons.css" />
+		<link rel="stylesheet" href="../../fonts/material-design/material-design.css" />
+		<link rel="stylesheet" href="../../fonts/mfglabs/mfglabs.css" />
+		<link rel="stylesheet" href="../../fonts/octicons/octicons.css" />
+		<link rel="stylesheet" href="../../fonts/open-iconic/open-iconic.css" />
+		<link rel="stylesheet" href="../../fonts/themify/themify.css" />
+		<link rel="stylesheet" href="../../fonts/weather-icons/weather-icons.css" />
+		<link rel="stylesheet" href="../../fonts/web-icons/web-icons.css" />
+		<link rel="stylesheet" href="../../lib/justTip/just-tip.css" />
+		<link rel="stylesheet" href="../../css/Administrator/channelStatusMonitoring.css" />
+	</head>
+
+	<body>
+		<!--头部-->
+		<header>
+			<div class="logo"></div>
+			<div class="user-operate" id="headerMenu">
+				<!--<span><i class="icon wb-user"></i>个人设置</span>
+				<span><i class="icon fa-sign-out"></i>用户名</span>-->
+			</div>
+		</header>
+
+		<!--菜单-->
+		<div class="menu" id="menuList">
+
+		</div>
+
+		<!--通道管理-->
+		<section class="main" id="mainContainer" v-cloak>
+			<div class="el-loading-mask" style="top: 150px;bottom: 20px;left: 20px;right: 20px">
+				<div class="el-loading-spinner"><i class="icon fa-spinner"></i>
+					<p class="el-loading-text">拼命加载中</p>
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="row-title">
+						<!--筛选-->
+						<div class="panel">
+							<div class="panel-header">
+								<h3 class="panel-title">筛选及功能项</h3>
+							</div>
+							<div class="panel-body">
+								<div class="search-left color-content" style="display: block">
+									<span class="state">状态</span>
+									<div class="state-list">
+										<span class="state-active" style="width: 96px;" @click="selectStatus($event,-1)">
+                                            <i style="opacity: 1;"></i>
+                                            <a >全部</a>
+                                        </span>
+										<span style="width: 74px;" @click="selectStatus($event,1)">
+											<i style="opacity: 0;"></i>
+                                            <a >暂停安检</a>
+                                        </span>
+										<span style="width: 74px;" @click="selectStatus($event,0)"><i style="opacity: 0;">
+										    </i><a>正在安检</a>
+										</span>
+										<!--<span class="" style="width: 74px;" @click="selectStatus($event,3)"><i style="opacity: 0;">
+										    </i><a>等待安检</a>
+									</span>-->
+									</div>
+								</div>
+								<div class="Time" style="width: 320px;display: inline-block;">
+									<div class="inTime-div">
+										<span style="background-color: #e4eaec;"><i class="iconmar icon wb-calendar"></i></span>
+										<span class="time-span">请选择时间</span>
+										<input id="inTime" readonly="readonly" style="font-size: 14px;" />
+										<span style="background-color: #e4eaec;" onclick="deleteTime(this)"><i class="iconmar icon wb-close"></i></span>
+									</div>
+								</div>
+								<!--<button class="addbtn" @click="openEdit(null,1)">
+        							<span>
+        								<i class="icon wb-plus"></i> 新增通道
+        							</span>
+        						</button>-->
+
+							</div>
+						</div>
+
+					</div>
+					<!--表格内容-->
+					<div class="row-body">
+						<div class="table-container">
+							<table class="table" id="tableBox">
+								<thead>
+									<tr class="table-title" style="table-layout: fixed;">
+										<th>通道号</th>
+										<th width="20%">运单号</th>
+										<th>安检人员</th>
+										<th width="12%">上班时间</th>
+										<th width="12%">下班时间</th>
+										<th>开包人员</th>
+										<th width="12%">上班时间</th>
+										<th width="12%">下班时间</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="item in items">
+										<td>{{item.channelId}}</td>
+										<td width="20%" class="channelIP">
+											<span class="tip-box">{{item.orderId}}</span>
+											<div v-if="item.state==1">
+												<span class="stop">
+                                                <a>暂停安检</a>
+                                                </span>
+											</div>
+											<!--<div v-if="item.orderStatus=='等待安检'">
+												<span class="normal">
+                                                <a>等待安检</a>
+                                                </span>
+											</div>-->
+											<div v-if="item.state==0">
+												<span class="unnormal">
+                                                <a>正在安检</a>
+                                                </span>
+											</div>
+										</td>
+										<td>{{item.checkPerson}}</td>
+										<td width="12%"><span style="min-width: 20%;">{{item.checkOnTime}}</span></td>
+										<td width="12%">{{item.checkOffTime}}</td>
+										<td>{{item.unpackPerson}}xiaoheih</td>
+										<td width="12%">{{item.unpackOnTime}}</td>
+										<td width="12%">{{item.unpackOffTime==='null'?'':item.unpackOffTime}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="row-floor">
+					<div class="footer clearfix">
+						<div class="fl" style="margin-left: 8px;">共{{total}}项</div>
+						<div id="paging" class="fr"></div>
+					</div>
+				</div>
+			</div>
+
+			<!--新增订单的弹窗（编辑弹窗）-->
+			<div class="pop-up-windows edit-windows add-order">
+				<div class="shadow-window" onclick="$('.add-order').hide()"></div>
+				<div class="pop-up-vertical-center pop-content" style="width: 40%;">
+					<div class="title">
+						<span>{{title}}</span>
+						<span class="icon pe-close" onclick="$('.add-order').hide()"></span>
+					</div>
+					<div class="pop-body">
+						<form name="form" id="orderForm">
+							<div class="pop-col">
+								<div>
+									<p>通道号</p>
+									<input class="pop-input" maxlength="10" id="channelId" autocomplete="off" name="orderId" v-model="channelId" onkeyup="verifyFrom(this)" />
+									<span class="error-hint-text">输入通道号</span>
+								</div>
+								<div>
+									<p>IP地址</p>
+									<input class="pop-input" oninput="verifyip(this)" maxlength="15" id="Ip" name="flightId" autocomplete="off" v-model="channelIp" onkeyup="verifyFrom(this)" />
+									<span class="error-hint-text">输入正确的IP地址</span>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<div class="pop-footer">
+						<button class="pop-submit" onclick="postPeople()">提交</button>
+						<button class="pop-cancle" onclick="$('.add-order').hide()">取消</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- 提示弹窗-->
+			<div class="pop-up-windows hint-windows delete">
+				<div class="shadow-window" onclick="$('.delete').hide()"></div>
+				<div class="vertical-center success">
+					<div class="title">
+						<i class="icon wb-bell hint-icon"></i>
+						<span>你确定删除该 {{alertName}} 通道？</span>
+						<i class="icon wb-close close-pop" onclick="$('.delete').hide()"></i>
+					</div>
+					<div class="pop-button">
+						<span class="confirm-btn" @click="confirmFlag(1)">确定</span>
+						<span class="cancle-btn" onclick="$('.delete').hide()">取消</span>
+					</div>
+				</div>
+			</div>
+			<!-- 提示弹窗  end-->
+
+			<!-- 提示弹窗-->
+			<div class="pop-up-windows hint-windows exit">
+				<div class="shadow-window" onclick="$('.exit').hide()"></div>
+				<div class="vertical-center success" style="left: 54%;">
+					<div class="title">
+						<i class="icon wb-bell hint-icon"></i>
+						<span>你确定退出当前用户？</span>
+						<i class="icon wb-close close-pop" onclick="$('.exit').hide()"></i>
+					</div>
+					<div class="pop-button">
+						<span class="confirm-btn" onclick="loginout()">确定</span>
+						<span class="cancle-btn" onclick="$('.exit').hide()">取消</span>
+					</div>
+				</div>
+			</div>
+			<!-- 提示弹窗  end-->
+			<!--登录提示-->
+			<div id="loginHint" class="notice-model">
+				<i class="icon  wb-info-circle"></i>
+				<span></span>
+			</div>
+
+		</section>
+
+		<script type="text/javascript" src="../../lib/jquery-2.0.1.min.js"></script>
+		<script type="text/javascript" src="../../lib/laydate/laydate.js"></script>
+		<script type="text/javascript" src="../../lib/yfslPageControl.js"></script>
+		<script type="text/javascript" src="../../lib/bootstrap.js"></script>
+		<script type="text/javascript" src="../../js/Utils.js"></script>
+		<script type="text/javascript" src="../../js/com.js"></script>
+		<script src="../../lib/vue.js"></script>
+		<script src="../../lib/justTip/justTools.js"></script>
+		<!--<script src="../../lib/js/tooltip.js" type="text/javascript" ></script>-->
+
+		<script type="text/javascript" src="../../js/Administrator/channelStatusMonitoring.js"></script>
+	</body>
+
+</html>

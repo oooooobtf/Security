@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>权限管理</title>
+		<link rel="stylesheet" href="../../css/com.css" />
+		<link rel="stylesheet" href="../../fonts/7-stroke/7-stroke.css" />
+		<link rel="stylesheet" href="../../fonts/font-awesome/font-awesome.css" />
+		<link rel="stylesheet" href="../../fonts/glyphicons/glyphicons.css" />
+		<link rel="stylesheet" href="../../fonts/ionicons/ionicons.css" />
+		<link rel="stylesheet" href="../../fonts/material-design/material-design.css" />
+		<link rel="stylesheet" href="../../fonts/mfglabs/mfglabs.css" />
+		<link rel="stylesheet" href="../../fonts/octicons/octicons.css" />
+		<link rel="stylesheet" href="../../fonts/open-iconic/open-iconic.css" />
+		<link rel="stylesheet" href="../../fonts/themify/themify.css" />
+		<link rel="stylesheet" href="../../fonts/weather-icons/weather-icons.css" />
+		<link rel="stylesheet" href="../../fonts/web-icons/web-icons.css" />
+		<!--<link rel="stylesheet" type="text/css" href="../lib/css/tooltip.css"/>-->
+		<link rel="stylesheet" href="../../lib/css/imgPlugin.css" />
+		<link rel="stylesheet" href="../../css/Administrator/rightManage.css" />
+	</head>
+
+	<body>
+		<!--头部-->
+		<header>
+			<div class="logo"></div>
+			<div class="user-operate" id="headerMenu">
+				<!--<span><i class="icon wb-user"></i>个人设置</span>
+				<span class="username" onclick="$('.hint-windows').show()"><i class="icon fa-sign-out " ></i>用户名</span>-->
+			</div>
+		</header>
+
+		<!--菜单-->
+		<div class="menu" id="menuList">
+
+		</div>
+
+		<!--通道管理-->
+		<section class="main" id="mainContainer" v-cloak>
+			<div class="container">
+				<div class="container-top">
+					<div>
+						<div style="float: right;color: #ffffff;">
+							<input type="text" class="btn save" @click="showRole()" v-model="roleName" readonly="readonly" />
+							<i class="icon fa-caret-down" style="position: absolute;right: 78px;top: 41px;"></i>
+						</div>
+						<!--<button class="btn save" @click="showRole()"><span class="role">admin</span><i class="icon fa-caret-down"></i></button>-->
+						<ul class="ul-list" v-show="roleShow">
+							<li class="ul-li" v-for="j in roles" @click="chooseRole(j)">{{j.roleName}}</li>
+						</ul>
+					</div>
+				</div>
+				<div class="container-row">
+					<div class="left-content">
+						<div style="font-size: 15px;">查看页面设置</div>
+						<div class="depart-list" id="menulist">
+							<ul class="list-ul">
+								<li class="main-menu">
+									<a onclick="clickFirstMenu(this)" class="list-li">
+										<input type="checkbox" id="liveManage" class="checkbox">
+										<span class="checkbox-span" onclick="clickbox(this)"></span>
+										<label for="liveManage" onclick="clickLabel(this)" class="checkd">监控管理</label>
+										<i></i>
+									</a>
+									<ul class="list-ul second-menu">
+										<li>
+											<a onclick="clickFirstMenu(this)" class="list-li">
+												<input id="condition"  type="checkbox" class="checkbox">
+												<span class="checkbox-span" onclick="clickchild(this)" ></span>
+												<label for="condition" onclick="clickSecLabel(this)" data-name="现场情况监控" class="checkd">现场情况监控</label>
+												<i></i>
+											</a>
+										</li>
+										<li>
+											<a onclick="clickFirstMenu(this)" class="list-li">
+												<input id="condition1"  type="checkbox" class="checkbox">
+												<span class="checkbox-span" onclick="clickchild(this)" ></span>
+												<label for="condition1" onclick="clickSecLabel(this)" data-name="通道状态监控" class="checkd">通道状态监控</label>
+												<i></i>
+											</a>
+										</li>
+										<!--<li>
+											<a onclick="clickFirstMenu(this)" class="list-li">
+												<input id="run"  type="checkbox" class="checkbox">
+												<span class="checkbox-span" onclick="clickchild(this)"></span>
+												<label for="run" onclick="clickSecLabel(this)" data-name="设备运行监控" class="checkd">设备运行监控</label>
+												<i></i>
+											</a>
+										</li>-->
+									</ul>
+								
+								</li>
+								<li class="main-menu">
+									<a onclick="clickFirstMenu(this)" class="list-li">
+										<input id="search1"  type="checkbox" class="checkbox">
+										<span class="checkbox-span" onclick="clickbox(this)"></span>
+										<label for="search" onclick="clickLabel(this)" class="checkd">综合查询</label>
+										<i></i>
+									</a>
+									<ul class="list-ul second-menu">
+										<li>
+											<a onclick="clickFirstMenu(this)" class="list-li">
+												<input id="order1"  type="checkbox" class="checkbox">
+												<span class="checkbox-span" onclick="clickchild(this)"></span>
+												<label for="order1" onclick="clickSecLabel(this)" data-name="运单综合查询"  class="checkd">运单综合查询</label>
+												<i></i>
+											</a>
+										</li>
+										<li>
+											<a onclick="clickFirstMenu(this)" class="list-li">
+												<input id="order2"  type="checkbox" class="checkbox">
+												<span class="checkbox-span" onclick="clickchild(this)"></span>
+												<label for="order2" onclick="clickSecLabel(this)" data-name="通道分析统计"  class="checkd">通道分析统计</label>
+												<i></i>
+											</a>
+										</li>
+									</ul>
+								</li>
+								
+								<li class="main-menu">
+									<a onclick="clickFirstMenu(this)" class="list-li">
+										<input id="system"  type="checkbox" class="checkbox">
+										<span class="checkbox-span" onclick="clickbox(this)"></span>
+										<label for="system"  onclick="clickLabel(this)" class="checkd">系统设置</label>
+										<i></i>
+									</a>
+									<ul class="list-ul second-menu">
+										<li>
+											<a onclick="clickFirstMenu(this)" class="list-li">
+												<input id="people"  type="checkbox" class="checkbox">
+												<span class="checkbox-span" onclick="clickchild(this)"></span>
+												<label for="people" onclick="clickSecLabel(this)" data-name="人员管理" class="checkd">人员管理</label>
+												<i></i>
+											</a>
+										</li>
+										<li>
+											<a onclick="clickFirstMenu(this)" class="list-li">
+												<input id="channel"  type="checkbox" class="checkbox">
+												<span class="checkbox-span" onclick="clickchild(this)"></span>
+												<label for="channel" onclick="clickSecLabel(this)" data-name="通道管理" class="checkd">通道管理</label>
+												<i></i>
+											</a>
+										</li>
+										<li>
+											<a onclick="clickFirstMenu(this)" class="list-li">
+												<input id="device"   type="checkbox" class="checkbox">
+												<span class="checkbox-span" onclick="clickchild(this)"></span>
+												<label for="device" onclick="clickSecLabel(this)" data-name="设备管理" class="checkd">设备管理</label>
+												<i></i>
+											</a>
+										</li>
+										<li>
+											<a onclick="clickFirstMenu(this)" class="list-li">
+												<input id="role"   type="checkbox" class="checkbox">
+												<span class="checkbox-span" onclick="clickchild(this)"></span>
+												<label for="role" onclick="clickSecLabel(this)" data-name="角色管理" class="checkd">角色管理</label>
+												<i></i>
+											</a>
+										</li>
+										<li>
+											<a onclick="clickFirstMenu(this)" class="list-li">
+												<input id="right"   type="checkbox" class="checkbox">
+												<span class="checkbox-span" onclick="clickchild(this)"></span>
+												<label for="right" onclick="clickSecLabel(this)" data-name="权限管理" class="checkd">权限管理</label>
+												<i></i>
+											</a>
+										</li>
+										<li>
+											<a onclick="clickFirstMenu(this)" class="list-li">
+												<input id="depart"   type="checkbox" class="checkbox">
+												<span class="checkbox-span" onclick="clickchild(this)"></span>
+												<label for="depart" onclick="clickSecLabel(this)" data-name="部门管理" class="checkd">部门管理</label>
+												<i></i>
+											</a>
+										</li>
+										<li>
+											<a onclick="clickFirstMenu(this)" class="list-li">
+												<input id="product"   type="checkbox" class="checkbox">
+												<span class="checkbox-span" onclick="clickchild(this)"></span>
+												<label for="product" onclick="clickSecLabel(this)" data-name="货代管理" class="checkd">货代管理</label>
+												<i></i>
+											</a>
+										</li>
+										<li>
+											<a onclick="clickFirstMenu(this)" class="list-li">
+												<input  type="checkbox"  id="param" class="checkbox">
+												<span class="checkbox-span" onclick="clickchild(this)"></span>
+												<label for="param" onclick="clickSecLabel(this)" data-name="一般参数" >一般参数</label>
+												<i></i>
+											</a>
+										</li>
+									</ul>
+								
+								</li>
+								<!--<li class="main-menu">
+									<a onclick="clickFirstMenu(this)" class="list-li">
+										<input id="search2"  type="checkbox" class="checkbox">
+										<span class="checkbox-span" onclick="clickbox(this)"></span>
+										<label for="search" onclick="clickLabel(this)" data-name="安检截屏管理" class="checkd">安检截屏管理</label>
+										<i></i>
+									</a>
+								</li>
+								<li class="main-menu">
+									<a onclick="clickFirstMenu(this)" class="list-li">
+										<input id="search3"  type="checkbox" class="checkbox">
+										<span class="checkbox-span" onclick="clickbox(this)"></span>
+										<label for="search" onclick="clickLabel(this)" data-name="开包管理" class="checkd">开包管理</label>
+										<i></i>
+									</a>
+								</li>-->
+								<!--<li class="main-menu">
+									<a onclick="clickFirstMenu(this)" class="list-li">
+										<input id="search"  type="checkbox" class="checkbox">
+										<span class="checkbox-span" onclick="clickbox(this)"></span>
+										<label for="search" onclick="clickLabel(this)" class="checkd">货代托运管理</label>
+										<i></i>
+									</a>
+									<ul class="list-ul second-menu">
+										<li>
+											<a onclick="clickFirstMenu(this)" class="list-li">
+												<input id="order2"  type="checkbox" class="checkbox">
+												<span class="checkbox-span" onclick="clickchild(this)"></span>
+												<label for="order" onclick="clickSecLabel(this)" data-name="货物托运（办公室）"  class="checkd">货物托运（办公室）</label>
+												<i></i>
+											</a>
+										</li>
+										<li>
+											<a onclick="clickFirstMenu(this)" class="list-li">
+												<input id="order"  type="checkbox" class="checkbox">
+												<span class="checkbox-span" onclick="clickchild(this)"></span>
+												<label for="order" onclick="clickSecLabel(this)" data-name="货物托运（现场）"  class="checkd">货物托运（现场）</label>
+												<i></i>
+											</a>
+										</li>
+										
+									</ul>
+								</li>-->
+								
+							</ul>
+							<!--<ul class="list-ul"> 
+								<li class="list-li" >
+									<span class="caret"></span>{{menuName}}
+									<i class="caret-right"></i>
+								</li>
+							</ul>-->
+						</div>
+					</div>
+					<div class="right-content">
+					<!--	<div class="list-msg">
+							<div class="msg-title">
+								<span>操作权限设置</span>
+							</div>
+							<div class="msg-input">
+								
+								<!--<div class="btn">
+									<input type="checkbox" id="addbtn" class="checkbox">
+									<span>新增</span>
+									<label for="addbtn">新增</label>
+								</div>-->
+								<!--<div class="edittn">
+									<input type="checkbox" id="addbtn2" class="checkbox">
+									<span>编辑</span>
+									<label for="addbtn2">编辑</label>
+								</div>-->
+								<!--<div class="deletebtn">
+									<input type="checkbox" id="addbtn3" class="checkbox">
+									<span>删除</span>
+									<label for="addbtn3">删除</label>
+								</div>
+							</div>
+						</div>-->
+
+					</div>
+				</div>
+
+			</div>
+			<!--新增订单的弹窗（编辑弹窗）-->
+			
+			<!-- 提示弹窗-->
+			<div class="pop-up-windows hint-windows exit">
+				<div class="shadow-window" onclick="$('.exit').hide()"></div>
+				<div class="vertical-center success" style="left: 54%;">
+					<div class="title">
+						<i class="icon wb-bell hint-icon"></i>
+						<span>你确定退出当前用户？</span>
+						<i class="icon wb-close close-pop" onclick="$('.exit').hide()"></i>
+					</div>
+					<div class="pop-button">
+						<span class="confirm-btn" onclick="loginout()">确定</span>
+						<span class="cancle-btn" onclick="$('.exit').hide()">取消</span>
+					</div>
+				</div>
+			</div>
+			<!-- 提示弹窗  end-->
+
+			<!-- 提示弹窗-->
+			<div class="pop-up-windows hint-windows delete">
+				<div class="shadow-window" onclick="$('.delete').hide()"></div>
+				<div class="vertical-center success">
+					<div class="title">
+						<i class="icon wb-bell hint-icon"></i>
+						<span>你确定删除该 {{alertName}} ？</span>
+						<i class="icon wb-close close-pop" onclick="$('.delete').hide()"></i>
+					</div>
+					<div class="pop-button">
+						<span class="confirm-btn" @click="deleteMenu()">确定</span>
+						<span class="cancle-btn" onclick="$('.delete').hide()">取消</span>
+					</div>
+				</div>
+			</div>
+			<!-- 提示弹窗  end-->
+
+			<!--登录提示-->
+			<div id="loginHint" class="notice-model">
+				<i class="icon  wb-info-circle"></i>
+				<span></span>
+			</div>
+
+		</section>
+
+		<script type="text/javascript" src="../../lib/jquery-2.0.1.min.js"></script>
+		<script type="text/javascript" src="../../lib/laydate/laydate.js"></script>
+		<script type="text/javascript" src="../../lib/yfslPageControl.js"></script>
+		<script type="text/javascript" src="../../lib/bootstrap.js"></script>
+		<script type="text/javascript" src="../../js/Utils.js"></script>
+		<script type="text/javascript" src="../../js/com.js"></script>
+		<script src="../../lib/vue.js"></script>
+		<script type="text/javascript" src="../../js/Administrator/rightManage.js"></script>
+	</body>
+
+</html>

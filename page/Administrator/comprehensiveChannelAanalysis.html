@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>通道分析统计</title>
+    <link rel="stylesheet" href="../../css/com.css"/>
+    <link rel="stylesheet" href="../../fonts/7-stroke/7-stroke.css"/>
+    <link rel="stylesheet" href="../../fonts/font-awesome/font-awesome.css"/>
+    <link rel="stylesheet" href="../../fonts/glyphicons/glyphicons.css"/>
+    <link rel="stylesheet" href="../../fonts/ionicons/ionicons.css"/>
+    <link rel="stylesheet" href="../../fonts/material-design/material-design.css"/>
+    <link rel="stylesheet" href="../../fonts/mfglabs/mfglabs.css"/>
+    <link rel="stylesheet" href="../../fonts/octicons/octicons.css"/>
+    <link rel="stylesheet" href="../../fonts/open-iconic/open-iconic.css"/>
+    <link rel="stylesheet" href="../../fonts/themify/themify.css"/>
+    <link rel="stylesheet" href="../../fonts/weather-icons/weather-icons.css"/>
+    <link rel="stylesheet" href="../../fonts/web-icons/web-icons.css"/>
+    <link rel="stylesheet" href="../../lib/css/imgPlugin.css"/>
+    <link rel="stylesheet" href="../../lib/justTip/just-tip.css">
+    <link rel="stylesheet" href="../../css/Administrator/comprehensiveChannelAanalysis.css">
+</head>
+<body>
+<div class="body">
+    <!--头部-->
+    <header>
+        <div class="logo"></div>
+        <div class="user-operate" id="headerMenu">
+            <!--<span><i class="icon wb-user"></i>个人设置</span>
+            <span><i class="icon fa-sign-out"></i>用户名</span>-->
+        </div>
+    </header>
+
+    <!--菜单-->
+    <div class="menu" id="menuList"></div>
+
+    <!--main-->
+    <section class="main" id="mainContainer">
+        <div class="container">
+            <div class="row">
+                <div class="row-title">
+                    <!--筛选-->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">筛选及功能项</h3>
+                        </div>
+                        <div class="panel-body">
+                            <!--状态-->
+                            <div class="search-left color-content">
+                                <span class="state">状态</span>
+                                <div class="state-list">
+                                        <span class="state-active" style=" width: 84px;">
+                                            <i style="opacity: 1;"></i>
+                                            <a>全部</a>
+                                        </span>
+                                    <span>
+                                            <i></i>
+                                            <a>未开包</a>
+                                        </span>
+                                    <span>
+                                            <i></i>
+                                            <a>已开包</a>
+                                        </span>
+                                </div>
+                            </div>
+                            <!--日期选择-->
+                            <div class="time-control">
+                                <div class="time-container">
+                                    <span class="time-icon"><i class="iconmar icon wb-calendar"></i></span>
+                                    <!--<span class="time-span">请选择日期</span>-->
+                                    <input id="screenTime" type="text" class="time-input" placeholder="请选择日期">
+                                    <span class="overtime-icon" onclick="getCloseTime()"><i
+                                            class="iconmar icon wb-close"></i></span>
+                                </div>
+                            </div>
+                            <!--代理人-->
+                            <div class="selectR-box">
+                                <span>代理人</span>
+                                <div class="pop-select RoleSelect" onclick="selectUlDown(this,1)">
+                                    <input class="pop-input-box" placeholder="全部" id="channelPeople" disabled
+                                           readonly="readonly" autocomplete="off" name="carryPerson"/>
+                                    <span class="select-icon">
+                                            <i class="icon wb-triangle-down"></i>
+                                        </span>
+                                </div>
+                                <ul class="pop-ul" id="agentList">
+                                </ul>
+                            </div>
+                            <!--通道号-->
+                            <div class="selectG-box">
+                                <span>通道号</span>
+                                <div class="pop-select ChannelSelect" onclick="selectUlDown(this,2)">
+                                    <input class="pop-input-box" id="channelPeople1" readonly="readonly" disabled
+                                           autocomplete="off" name="carryPerson" placeholder="全部"/>
+                                    <span class="select-icon">
+                                            <i class="icon wb-triangle-down"></i>
+                                        </span>
+                                </div>
+                                <ul class="pop-ul" id="channelList">
+                                </ul>
+                            </div>
+                            <!--搜索-->
+                            <div class="search-input">
+                                <div class="search">
+                                    <input class="input input-search" placeholder="按承运人、航班号、运单号查询" type="text"
+                                           onfocus="addBorder(this)" onblur="removeBorder(this)"/>
+                                    <span class="search-icon" onclick="getSearchFn(this)">
+                                            <i class="icon glyphicon glyphicon-search"></i>
+                                        </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!--表格内容-->
+                <div class="row-body">
+                    <div class="el-loading-mask" style="top: 150px;bottom: 20px;left: 20px;right: 20px;display: none">
+                        <div class="el-loading-spinner"><i class="icon fa-spinner"></i>
+                            <p class="el-loading-text">拼命加载中</p>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="table-box" id="tableBox">
+                            <thead>
+                            <tr class="table-title">
+                                <th width="6%">通道号</th>
+                                <th width="15%">运单号</th>
+                                <th width="8%">航班号</th>
+                                <th width="6%">件数</th>
+                                <th width="10%">承运人</th>
+                                <th width="10%">代理人</th>
+                                <th width="8%">开包人员</th>
+                                <th width="8%">安检人员</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbodyBox">
+                                <tr>
+                                    <td>20172</td>
+                                    <td class="channelIP" width="13%">
+                                        <span class="tip-box">880-76176111</span>
+                                        <span class="normal">已开包</span>
+                                    </td>
+                                    <td>EU6662</td>
+                                    <td width="5%">10</td>
+                                    <td width="10%">吴某某吴某吴</td>
+                                    <td width="10%" class="demoStyle3">飞鹰有限公司飞鹰有限公司飞鹰有限公司</td>
+                                    <td>吴某某</td>
+                                    <td>吴某某</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="table-total">
+               <div>
+                   <span class="span-1">运单合计</span><span class="span-2 order-total"></span>
+                   <span class="span-3">货物总数合计</span><span class="span-4 cargo-total"></span>
+                   <span class="span-5">开包总数合计</span><span class="span-6 unpakc-order-total"></span>
+               </div>
+            </div>
+            <div class="row-floor">
+                <div class="footer clearfix">
+                    <div class="fl total-num">共0项</div>
+                    <div id="paging" class="fr"></div>
+                </div>
+            </div>
+        </div>
+        <!--登录提示-->
+        <div id="loginHint" class="notice-model">
+            <i class="icon  wb-info-circle"></i>
+            <span></span>
+        </div>
+
+        <!-- 提示弹窗-->
+        <div class="pop-up-windows hint-windows exit">
+            <div class="shadow-window" onclick="$('.exit').hide()"></div>
+            <div class="vertical-center success" style="left: 54%;">
+                <div class="title">
+                    <i class="icon wb-bell hint-icon"></i>
+                    <span>你确定退出当前用户？</span>
+                    <i class="icon wb-close close-pop" onclick="$('.exit').hide()"></i>
+                </div>
+                <div class="pop-button">
+                    <span class="confirm-btn" onclick="loginout()">确定</span>
+                    <span class="cancle-btn" onclick="$('.exit').hide()">取消</span>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+<script type="text/javascript" src="../../lib/jquery-2.0.1.min.js"></script>
+<script type="text/javascript" src="../../lib/laydate/laydate.js"></script>
+
+<script src="../../lib/justTip/justTools.js"></script>
+
+<script type="text/javascript" src="../../lib/yfslPageControl.js"></script>
+<script type="text/javascript" src="../../lib/bootstrap.js"></script>
+<script type="text/javascript" src="../../js/Utils.js"></script>
+<script type="text/javascript" src="../../js/unpack/sockjs.min.js"></script>
+<script type="text/javascript" src="../../js/unpack/stomp.min.js"></script>
+<script type="text/javascript" src="../../js/com.js"></script>
+<script type="text/javascript" src="../../js/Administrator/comprehensiveChannelAanalysis.js"></script>
+</body>
+</html>

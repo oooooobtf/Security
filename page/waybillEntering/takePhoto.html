@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>人脸拍照</title>
+		<link rel="stylesheet" href="../../fonts/7-stroke/7-stroke.css" />
+		<link rel="stylesheet" href="../../fonts/font-awesome/font-awesome.css" />
+	</head>
+
+	<body>
+		<div>
+			<div id="webcam" style="margin-top: 40px;text-align: center;"></div>
+			<canvas id="canvas" width="320" height="240" style="display: none;"></canvas>
+			<span class="click-btn" onclick="Scan()"><i class="icon fa-camera"></i>拍照</span>
+		</div>
+	</body>
+	<style>
+		.click-btn {
+			width: 150px;
+			margin: 0 auto;
+			text-align: center;
+			display: block;
+			border: 1px solid #666666;
+			padding: 10px 20px;
+			font-size: 14px;
+			border-radius: 4px;
+			color: black;
+			cursor: pointer;
+			margin-top: 20px;
+		}
+	</style>
+	<script type="text/javascript" src="../../lib/jquery-2.0.1.min.js"></script>
+	<script src="../../lib/js/jquery.webcam.js"></script>
+	<script>
+		$(function() {
+			cameraTake()
+		})
+
+		function cameraTake() {
+			var canvas = document.getElementById("canvas");
+			var pos = 0,
+				ctx = null,
+				image = [];
+			jQuery("#webcam").webcam({
+				width: 600,
+				height: 400,
+				mode: "callback",
+				swffile: "../../lib/js/jscam_canvas_only.swf", // 这里引入swf文件，注意路径
+				onTick: function(remain) {},
+				onSave: function(data) {
+					var col = data.split(";");
+					var img = image;
+					for(var i = 0; i < 400; i++) {
+						var tmp = parseInt(col[i]);
+						img.data[pos + 0] = (tmp >> 16) & 0xff;
+						img.data[pos + 1] = (tmp >> 8) & 0xff;
+						img.data[pos + 2] = tmp & 0xff;
+						img.data[pos + 3] = 0xff;
+						pos += 4;
+					}
+					if(pos >= 4 * 600 * 400) {
+						// 将图片显示到canvas中
+						ctx.putImageData(img, 0, 0);
+						// 取得图片的base64码  AirportInternational
+						var base64 = canvas.toDataURL("image/png");
+						photo = base64;
+						isOpen = true;
+						// 将图片base64码设置给img
+						//var base64image = document.getElementById('base64image');
+						//    base64image.setAttribute('src', base64);
+						pos = 0;
+					}
+				},
+
+				onCapture: function() {
+					webcam.save();
+				},
+
+				debug: function(type, string) {},
+				onLoad: function() {}
+
+			});
+			var canvas = document.getElementById("canvas");
+			if(canvas.getContext) {
+				ctx = canvas.getContext("2d");
+				ctx.clearRect(0, 0, 320, 240);
+				var img = new Image();
+				img.onload = function() {
+					ctx.drawImage(img, 320, 240);
+				}
+				image = ctx.getImageData(0, 0, 320, 240);
+			}
+
+		}
+
+		function dataURItoBlob(base64Data) {
+			var format = "image/jpeg";
+			var base64 = base64Data;
+			var code = window.atob(base64.split(",")[1]);
+			var aBuffer = new window.ArrayBuffer(code.length);
+			var uBuffer = new window.Uint8Array(aBuffer);
+			for(var i = 0; i < code.length; i++) {
+				uBuffer[i] = code.charCodeAt(i) & 0xff;
+			}
+			var blob = null;
+			try {
+				blob = new Blob([uBuffer], {
+					type: format
+				});
+			} catch(e) {
+				window.BlobBuilder = window.BlobBuilder ||
+					window.WebKitBlobBuilder ||
+					window.MozBlobBuilder ||
+					window.MSBlobBuilder;
+				if(e.name == 'TypeError' && window.BlobBuilder) {
+					var bb = new window.BlobBuilder();
+					bb.append(uBuffer.buffer);
+					blob = bb.getBlob("image/jpeg");
+				} else if(e.name == "InvalidStateError") {
+					blob = new Blob([aBuffer], {
+						type: format
+					});
+				} else {}
+			}
+			return blob;
+
+		};
+
+		function base64toUrl(data) {
+			var formDataImg = new FormData()
+			formDataImg.append('file', dataURItoBlob(data))
+
+			$.ajax({
+				type: 'POST',
+				url: Utils.url + '/common/upload?filePath=order' + '&timestamp=' + new Date().getTime(),
+				//		headers: {
+				//			'Content-Type': 'application/json; charset=UTF-8'
+				//		},
+				processData: false,
+				contentType: false,
+				xhrFields: {
+					withCredentials: true
+				},
+				data: formDataImg,
+				success: function(result) {
+					console.log(result)
+					showPhoto(result.data);
+				},
+				error: function(e) {}
+			})
+		}
+
+		function Scan() {
+			webcam.capture();
+		}
+	</script>
+
+</html>

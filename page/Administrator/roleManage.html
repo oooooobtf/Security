@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>角色管理</title>
+		<link rel="stylesheet" href="../../css/com.css" />
+		<link rel="stylesheet" href="../../fonts/7-stroke/7-stroke.css" />
+		<link rel="stylesheet" href="../../fonts/font-awesome/font-awesome.css" />
+		<link rel="stylesheet" href="../../fonts/glyphicons/glyphicons.css" />
+		<link rel="stylesheet" href="../../fonts/ionicons/ionicons.css" />
+		<link rel="stylesheet" href="../../fonts/material-design/material-design.css" />
+		<link rel="stylesheet" href="../../fonts/mfglabs/mfglabs.css" />
+		<link rel="stylesheet" href="../../fonts/octicons/octicons.css" />
+		<link rel="stylesheet" href="../../fonts/open-iconic/open-iconic.css" />
+		<link rel="stylesheet" href="../../fonts/themify/themify.css" />
+		<link rel="stylesheet" href="../../fonts/weather-icons/weather-icons.css" />
+		<link rel="stylesheet" href="../../fonts/web-icons/web-icons.css" />
+		<link rel="stylesheet" type="text/css" href="../../lib/justTip/just-tip.css" />
+		<link rel="stylesheet" href="../../css/Administrator/RoleManage.css" />
+	</head>
+
+	<body>
+		<!--头部-->
+		<header>
+			<div class="logo"></div>
+			<div class="user-operate" id="headerMenu">
+				<!--<span><i class="icon wb-user"></i>个人设置</span>
+				<span><i class="icon fa-sign-out"></i>用户名</span>-->
+			</div>
+		</header>
+
+		<!--菜单-->
+		<div class="menu" id="menuList">
+
+		</div>
+
+		<!--通道管理-->
+		<section class="main" id="mainContainer" v-cloak>
+			<div class="el-loading-mask" style="top: 150px;bottom: 20px;left: 20px;right: 20px;">
+				<div class="el-loading-spinner"><i class="icon fa-spinner"></i>
+					<p class="el-loading-text">拼命加载中</p>
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="row-title">
+						<!--筛选-->
+						<div class="panel">
+							<div class="panel-header">
+								<h3 class="panel-title">筛选及功能项</h3>
+							</div>
+							<div class="panel-body">
+								<button class="addbtn" @click="openEdit(null,1)">
+        							<span>
+        								<i class="icon wb-plus"></i> 新增角色
+        							</span>
+        						</button>
+
+							</div>
+						</div>
+
+					</div>
+					<!--表格内容-->
+					<div class="row-body">
+						<div class="table-container">
+							<table class="table" id="table">
+								<thead>
+									<tr class="table-title">
+										<th width="20%">角色类型</th>
+										<th width="20%">角色名称</th>
+										<th width="45%">角色说明</th>
+
+										<th width="15%">操作</th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="item in items">
+										<td >{{item.roleType}}</td>
+										<td >{{item.roleName}}</td>
+										<td class="channelIP" >{{item.roleDesc}}
+
+										</td>
+										<td class="td-icon">
+											<i class="icon wb-edit " data-name="编辑" @click="openEdit(item,2)"></i>
+											<!--<i class="right icon wb-user-circle " @click="gotoRight(item)" data-name="分配权限"></i>-->
+											<i class="icon wb-close " data-name="删除" @click="openDelete(item)"></i>
+										</td>
+									</tr>
+								</tbody>
+
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="row-floor">
+					<div class="footer clearfix">
+						<div class="fl" style="margin-left: 8px;">共{{total}}项</div>
+						<div id="paging" class="fr"></div>
+					</div>
+				</div>
+			</div>
+
+			<!--新增订单的弹窗（编辑弹窗）-->
+			<div class="pop-up-windows edit-windows add-order">
+				<div class="shadow-window" onclick="$('.add-order').hide()"></div>
+				<div class="pop-up-vertical-center pop-content" style="width: 30%;">
+					<div class="title">
+						<span>{{title}}</span>
+						<span class="icon pe-close" onclick="$('.add-order').hide()"></span>
+					</div>
+					<div class="pop-body">
+						<form name="form" id="orderForm">
+							<div class="pop-col">
+								<div style="width: 76%;">
+									<p>角色类型</p>
+									<div class="pop-select Role" @click="showSelect()">
+										<input id="roleType" readonly="readonly" unselectable='on' autocomplete="off" v-model="roleType" onclick="addblue()"  onblur="inputBlur()"  />
+										<span class="select-icon">
+                                	    <i class="icon wb-triangle-down"></i>
+                                       </span>
+									</div>
+								<!--	<button class="btn add" type="button" style="float: right;" @click="hasRole=true">新增</button>-->
+									<ul class="pop-ul" v-show="roleShow">
+										<li v-for="j in roleTypes" @click="chooseRole(j)" >{{j}}
+										</li>
+									</ul>
+									<!--<button class="btn add" style="float: right;">新增</button>-->
+									<span class="error-hint-text type">选择角色类型</span>
+								</div>
+								
+
+							</div>
+							<div class="pop-col">
+								<div style="width: 51%;">
+									<p>角色名称</p>
+									<input class="pop-input" maxlength="10" id="roleName" autocomplete="off" placeholder="请输入" name="roleName" v-model="roleName" onkeyup="verifyFrom(this)" />
+									<span class="error-hint-text">输入角色名称</span>
+								</div>
+
+							</div>
+							<div class="pop-col">
+
+								<div style="width: 96%;">
+									<p>角色描述</p>
+									<textarea class="bigtext" maxlength="150" name="roleDetail" autocomplete="off" v-model="roleDetail" @focus="addborder(1)" @input="addscroll($event)" @blur="addborder(2)" onkeyup="verifyFrom(this)"></textarea>
+									<!--<input class="pop-input" id="Ip" name="flightId" autocomplete="off" v-model="channelIp" onkeyup="verifyFrom(this)" />-->
+									<span class="text-limite">{{roleDetail.length}}/150</span>
+									<span class="error-hint-text">输入角色描述</span>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<div class="pop-footer">
+						<button class="pop-submit" onclick="postPeople()">提交</button>
+						<button class="pop-cancle" onclick="$('.add-order').hide()">取消</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- 提示弹窗-->
+			<div class="pop-up-windows hint-windows exit">
+				<div class="shadow-window" onclick="$('.exit').hide()"></div>
+				<div class="vertical-center success" style="left: 54%;">
+					<div class="title">
+						<i class="icon wb-bell hint-icon"></i>
+						<span>你确定退出当前用户？</span>
+						<i class="icon wb-close close-pop" onclick="$('.exit').hide()"></i>
+					</div>
+					<div class="pop-button">
+						<span class="confirm-btn" onclick="loginout()">确定</span>
+						<span class="cancle-btn" onclick="$('.exit').hide()">取消</span>
+					</div>
+				</div>
+			</div>
+			<!-- 提示弹窗  end-->
+
+			<!-- 提示弹窗-->
+			<div class="pop-up-windows hint-windows delete">
+				<div class="shadow-window" onclick="$('.delete').hide()"></div>
+				<div class="vertical-center success">
+					<div class="title">
+						<i class="icon wb-bell hint-icon"></i>
+						<span>你确定删除该 {{alertName}} 角色？</span>
+						<i class="icon wb-close close-pop" onclick="$('.delete').hide()"></i>
+					</div>
+					<div class="pop-button">
+						<span class="confirm-btn" @click="confirmFlag(1)">确定</span>
+						<span class="cancle-btn" onclick="$('.delete').hide()">取消</span>
+					</div>
+				</div>
+			</div>
+			<!-- 提示弹窗  end-->
+
+			<!--登录提示-->
+			<div id="loginHint" class="notice-model">
+				<i class="icon  wb-info-circle"></i>
+				<span></span>
+			</div>
+
+		</section>
+
+		<script type="text/javascript" src="../../lib/jquery-2.0.1.min.js"></script>
+		<script type="text/javascript" src="../../lib/laydate/laydate.js"></script>
+		<script type="text/javascript" src="../../lib/yfslPageControl.js"></script>
+		<script type="text/javascript" src="../../lib/bootstrap.js"></script>
+		<!--<script type="text/javascript" src="../../lib/imgUp.js"></script>-->
+		<script type="text/javascript" src="../../lib/justTip/justTools.js"></script>
+		<script type="text/javascript" src="../../js/Utils.js"></script>
+		<script type="text/javascript" src="../../js/com.js"></script>
+		<script src="../../lib/vue.js"></script>
+		<script type="text/javascript" src="../../js/Administrator/RoleManage.js"></script>
+	</body>
+
+</html>

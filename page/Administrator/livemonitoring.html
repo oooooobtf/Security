@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>现场监控情况</title>
+    <link rel="stylesheet" href="../../css/com.css"/>
+    <link rel="stylesheet" href="../../fonts/7-stroke/7-stroke.css"/>
+    <link rel="stylesheet" href="../../fonts/font-awesome/font-awesome.css"/>
+    <link rel="stylesheet" href="../../fonts/glyphicons/glyphicons.css"/>
+    <link rel="stylesheet" href="../../fonts/ionicons/ionicons.css"/>
+    <link rel="stylesheet" href="../../fonts/material-design/material-design.css"/>
+    <link rel="stylesheet" href="../../fonts/mfglabs/mfglabs.css"/>
+    <link rel="stylesheet" href="../../fonts/octicons/octicons.css"/>
+    <link rel="stylesheet" href="../../fonts/open-iconic/open-iconic.css"/>
+    <link rel="stylesheet" href="../../fonts/themify/themify.css"/>
+    <link rel="stylesheet" href="../../fonts/weather-icons/weather-icons.css"/>
+    <link rel="stylesheet" href="../../fonts/web-icons/web-icons.css"/>
+    <link rel="stylesheet" href="../../css/Administrator/livemonitoring.css"/>
+</head>
+
+<body class="body">
+<!--头部-->
+<header>
+    <div class="logo"></div>
+    <div class="user-operate" id="headerMenu">
+        <!--<span><i class="icon wb-user"></i>个人设置</span>
+        <span><i class="icon fa-sign-out"></i>用户名</span>-->
+    </div>
+</header>
+<!--菜单-->
+<div class="menu" id="menuList"></div>
+
+<!--主要内容-->
+<div class="main-content">
+    <!--<div class="el-loading-mask" style="top: 26px;bottom: 20px;left: 20px;right: 20px;">
+        <div class="el-loading-spinner"><i class="icon fa-spinner"></i>
+            <p class="el-loading-text">拼命加载中</p>
+        </div>
+    </div>-->
+    <div class="content-area block-area">
+        <!--头部-->
+        <div class="top">
+            <div class="aisle-number">
+                <div class="select-name">
+                    <span style="font-size: 14px;">通道号:</span>
+                </div>
+                <!--<div class="select-down dropdown">-->
+                <div class="select-channel">
+                    <div>
+                        <input onclick="$('.channel-number-pop').show()" value="请选择" id="channelNumber"
+                               readonly="readonly"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--头部  end-->
+
+        <!--中间内容-->
+        <div class="center-content">
+            <div  class="video-box" style="width:67%;">
+             	<p class="big-title">全部视频<span style="font-size: 14px">（双击视频，全屏预览）</span></p>
+				<object classid="clsid:AC036352-03EB-4399-9DD0-602AB1D8B6B9" id="PreviewOcx"  width="99%" height="629px" name="ocx" ></object>
+			</div>
+            <div style="width: 31%;">
+                <p class="big-title">相关信息</p>
+                <!--相关信息-->
+                <div class="correlation-info">
+                    <div>
+                        <div class="one-item clearfix">
+                            <i></i>
+                            <div class="order-number fl">
+                                <p>运单号</p>
+                                <!--<p id="waybillNumber">880-7654321</p>-->
+                                <p id="waybillNumber"></p>
+                            </div>
+                            <div class="basic-info fr">
+                                <!--<p id="flightAndCount"><span>件数：1</span><span>航班：CA4488</span></p>-->
+                                <p id="flightAndCount"><span>件数：</span><span>航班：</span></p>
+                                <!--<p><span>安检人员</span><span id="securityStaff"></span></p>-->
+                            </div>
+                        </div>
+
+                        <div class="two-item clearfix">
+                            <div class="item order-time-basic">
+                                <i></i>
+                                <div style="width: 38%;">
+                                    <p>
+                                    	<!--<span class="item-titile">承运人</span>-->
+                                    	<span class="item-titile">承运人</span>
+                                    	<span class="item-content" style="display: block;padding-top: 5px;" id="carryPerson"></span>
+                                    	<!--<span class="item-content" style="display: block;padding-top: 5px;" id="carryPerson">吴某某</span>-->
+                                    </p>
+                                    <p>
+                                    	<span class="item-titile">代理人</span>
+                                    	<span class="item-content" style="display: block;padding-top: 5px;" id="proxyName"></span>
+                                        <!--<span class="item-titile">代理人</span>-->
+                                        <!--<span class="item-content" style="display: block;padding-top: 5px;" id="proxyName">飞鹰有限公司</span>-->
+                                    </p>
+                                </div>
+                                <div class="all-time">
+                                    <p><span class="item-titile">运单创建时间</span><span class="item-content"  id="createTime"></span>
+                                    </p>
+                                    <p><span class="item-titile">最近开始时间</span><span class="item-content"  id="startTime"></span>
+                                    </p>
+                                    <p><span class="item-titile">最近暂停时间</span><span class="item-content"  id="enTime"></span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="item order-imgs" style="display: none;">
+                                <i></i>
+                                <p>相关图片</p>
+                                <ul class="all-img">
+                                    <!--<li><img src="../../image/login.png"/></li>-->
+                                    <!--<li><img src="../../image/login.png"/></li>-->
+                                    <!--<li><img src="../../image/login.png"/></li>-->
+                                    <!--<li><img src="../../image/login.png"/></li>-->
+                                    <!--<li><img src="../../image/login.png"/></li>-->
+                                    <!--<li><img src="../../image/login.png"/></li>-->
+                                    <!--<li><img src="../../image/login.png"/></li>-->
+                                    <!--<li><img src="../../image/login.png"/></li>-->
+                                    <!--<li><img src="../../image/login.png"/></li>-->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div></div>
+        </div>
+        <!--中间内容  end-->
+
+       <!-- <button onclick="aaa()"></button>-->
+    </div>
+</div>
+
+<!--所有的通道号-->
+<div class="pop-up-windows edit-windows channel-number-pop" style="display: none;">
+    <div class="shadow-window" onclick="$('.channel-number-pop').hide()"></div>
+    <div class="channel-vertical-center pop-content" style="width: 27%;">
+        <div class="title">
+            <span>通道号</span>
+            <span class="icon pe-close" onclick="$('.channel-number-pop').hide()"></span>
+        </div>
+        <div class="pop-body">
+            <div class="progress-list">
+                <ul class="channel-number"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 提示弹窗-->
+<div class="pop-up-windows hint-windows exit">
+    <div class="shadow-window" onclick="$('.exit').hide()"></div>
+    <div class="vertical-center success" style="left: 54%;top: 15%;">
+        <div class="title">
+            <i class="icon wb-bell hint-icon"></i>
+            <span>你确定退出当前用户？</span>
+            <i class="icon wb-close close-pop" onclick="$('.exit').hide()"></i>
+        </div>
+        <div class="pop-button">
+            <span class="confirm-btn" onclick="loginout()">确定</span>
+            <span class="cancle-btn" onclick="$('.exit').hide()">取消</span>
+        </div>
+    </div>
+</div>
+<!-- 提示弹窗  end-->
+
+<!--登录提示-->
+<div id="loginHint" class="notice-model" style="min-width: 340px;">
+    <i class="icon  wb-info-circle"></i>
+    <span></span>
+</div>
+
+
+<script type="text/javascript" src="../../lib/jquery-2.0.1.min.js"></script>
+<script type="text/javascript" src="../../lib/bootstrap.js"></script>
+<script type="text/javascript" src="../../lib/js/stomp.min.js"></script>
+<script type="text/javascript" src="../../lib/js/sockjs.min.js"></script>
+<script type="text/javascript" src="../../js/Utils.js"></script>
+<script type="text/javascript" src="../../js/com.js"></script>
+<!-- 视频 -->
+<script src="../../js/webVideo/webVideoCtrl.js"></script>
+<!-- 视频 -->
+
+<script type="text/javascript" src="../../js/Administrator/livemonitoring.js"></script>
+
+</body>
+
+</html>

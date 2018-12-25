@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate"/>
+    <meta http-equiv="Expires" content="0"/>
+    <title>开包台</title>
+    <link rel="stylesheet" href="../../css/com.css"/>
+    <link rel="stylesheet" href="../../fonts/7-stroke/7-stroke.css"/>
+    <link rel="stylesheet" href="../../fonts/font-awesome/font-awesome.css"/>
+    <link rel="stylesheet" href="../../fonts/glyphicons/glyphicons.css"/>
+    <link rel="stylesheet" href="../../fonts/ionicons/ionicons.css"/>
+    <link rel="stylesheet" href="../../fonts/material-design/material-design.css"/>
+    <link rel="stylesheet" href="../../fonts/mfglabs/mfglabs.css"/>
+    <link rel="stylesheet" href="../../fonts/octicons/octicons.css"/>
+    <link rel="stylesheet" href="../../fonts/open-iconic/open-iconic.css"/>
+    <link rel="stylesheet" href="../../fonts/themify/themify.css"/>
+    <link rel="stylesheet" href="../../fonts/weather-icons/weather-icons.css"/>
+    <link rel="stylesheet" href="../../fonts/web-icons/web-icons.css"/>
+    <link rel="stylesheet" href="../../css/unpack/unpack.css">
+    <!--<script src="https://open.ys7.com/sdk/js/1.3/ezuikit.js"></script>-->
+
+
+</head>
+<body style="overflow: hidden;">
+<div class="">
+    <!--头部-->
+    <header>
+        <div class="logo"></div>
+        <div class="user-operate">
+            <span class="setting" onclick="$('.add-order').show()" style="margin-right:40px"><i
+                    class="icon wb-user"></i>个人设置</span>
+            <span class="username" onclick="$('.exit').show()"><i class="icon fa-sign-out"></i><span></span></span>
+        </div>
+    </header>
+    <!--头部-->
+
+    <div class="u-main">
+        <!--图片选择-->
+        <div class="img-container">
+            <h3 class="img-header">图片选择</h3>
+            <div class="img-header-box">
+                <div class="u-img-list">
+                    <ul class="img-box">
+                        <!--<li class="">
+                            <img class="" src="../../image/unpack/zanwei.jpg" alt="">
+                            <i class="img-box-bg"></i>
+                            <span>2018/3/27 00:00 </span>
+                            <div class="load-model"></div>
+                        </li>-->
+                    </ul>
+                </div>
+            </div>
+            <i class="img-left transition-all icon wb-chevron-left"></i>
+            <i class="img-right active transition-all icon wb-chevron-right"></i>
+        </div>
+        <!-- main -->
+        <div class="u-middle">
+            <!--单号信息-->
+            <div class="u-left">
+                <div class="bill-information">
+                    <div class="bi-top-left">
+                        <i></i>
+                        <span>运单号：</span>
+                        <h4 class="bi-trackingNumber">暂无</h4>
+                    </div>
+                    <div class="bi-top-right">
+                        <span>件数：<i class="bi-number">暂无</i></span>
+                        <span>航班：<i class="bi-flightNo">暂无</i></span>
+                        <!--<p>安检员：<span class="bi-check">暂无</span></p>-->
+                    </div>
+                </div>
+                <div class="bill-time">
+                    <i></i>
+                    <div class="bt-middle-left">
+                        <div><span class="span-color">承运人 </span><span
+                                class="span-color2 btm-carrier bi-carrier">暂无</span></div>
+                        <div><span class="span-color">代理人 </span><span class="span-color2 btm-agent bi-agent">暂无</span>
+                        </div>
+                    </div>
+                    <div class="bt-middle-right">
+                        <ul>
+                            <li><span class="span-color">运单创建时间 </span><span class="span-color2 bi-establish">暂无</span>
+                            </li>
+                            <li><span class="span-color">最近开始时间 </span><span class="span-color2 bi-start">暂无</span></li>
+                            <li class="bt-bottom"><span class="span-color">最近暂停时间 </span><span
+                                    class="span-color2 bi-suspend">暂无</span></li>
+                        </ul>
+                    </div>
+                    <i class="i-bottom"></i>
+                    <span class="span-bottom">相关图片</span>
+                </div>
+                <div class="bill-img">
+                    <ul class="bill-img-ul">
+                        <!--<li>
+                            <div class="bi-img-div">
+                                <img src="../../image/unpack/errorimg.png" alt="">
+                                <p>加载失败!</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="bi-img-div">
+                                <img src="../../image/unpack/beforeimg.png" alt="">
+                                <p>加载中...</p>
+                            </div>
+                        </li>-->
+                        <li>
+                            <div class="bi-img-div">
+                                <img src="../../image/unpack/beforeimg.png" alt="">
+                                <p>暂无图片</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="bi-img-div">
+                                <img src="../../image/unpack/beforeimg.png" alt="">
+                                <p>暂无图片</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="bi-img-div">
+                                <img src="../../image/unpack/beforeimg.png" alt="">
+                                <p>暂无图片</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="bi-img-div">
+                                <img src="../../image/unpack/beforeimg.png" alt="">
+                                <p>暂无图片</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="bi-img-div">
+                                <img src="../../image/unpack/beforeimg.png" alt="">
+                                <p>暂无图片</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="bi-img-div">
+                                <img src="../../image/unpack/beforeimg.png" alt="">
+                                <p>暂无图片</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="bi-img-div">
+                                <img src="../../image/unpack/beforeimg.png" alt="">
+                                <p>暂无图片</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="bi-img-div">
+                                <img src="../../image/unpack/beforeimg.png" alt="">
+                                <p>暂无图片</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="bi-img-div">
+                                <img src="../../image/unpack/beforeimg.png" alt="">
+                                <p>暂无图片</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--已选图片绘制框-->
+            <div class="u-center">
+                <div>
+                    <h3>已选图片</h3>
+                    <div class="canvas-box" id="canvasBox">
+                        <canvas class="canvas1" id="canvas1">
+                            改浏览器不支持canvas,请换一下IE 10的版本
+                        </canvas>
+                        <img id="cbImg" class="cb-img" data-id="" data-channelId="" data-trackingNumber=""
+                             src="../../image/unpack/zanwei.jpg">
+                    </div>
+                </div>
+            </div>
+            <!--图片标注信息--> 
+            <div class="u-right" style="height: 611px;overflow-y: auto;">
+                <div class="ur-header">
+                    <span class="transition-all" onclick="clearCanvasOne()"><i></i>上一步</span><span
+                        class="transition-all" onclick="clearCanvasAll()"><i></i>清空标记</span>
+                </div>
+                <div>
+                    <ul class="list-contraband">
+                        <li>
+                            <span>物品名称*</span>
+                            <div class="contraband-name-div">
+                                <input class="contraband-name" id="contrabandName" onclick="imgRemarks(this,1)"  type="text">
+                                <i onclick="imgRemarks(this,1)"></i>
+                            </div>
+                            <ol class="select-box name-list">
+                                <li title="枪">枪</li>
+                                <li title="酒精">酒精</li>
+                                <li title="香水">香水</li>
+                                <li title="电池">电池</li>
+                                <li title="刀制管具">管制刀具</li>
+                            </ol>
+                        </li>
+                        <li class="no-focus-blur">
+                            <span>物品数量*</span>
+                            <div>
+                                <input class="contraband-num" id="" type="tel" value="1">
+                            </div>
+                        </li>
+                        <li>
+                            <span>物品种类*</span>
+                            <div class="contraband-type-div">
+                                <input class="contraband-type" id="contrabandType" onclick="imgRemarks(this,1)"  type="text">
+                                <i onclick="imgRemarks(this,1)"></i>
+                            </div>
+                            <ol class="select-box type-list">
+                            	<li title="利器">利器</li>
+                                <li title="易燃物">易燃物</li>
+                                <li title="腐蚀品">腐蚀品</li>
+                                <li title="毒害品和感染性物品">毒害品和感染性物品</li>
+                                <li title="氧化剂和有机过氧化物">氧化剂和有机过氧化物</li>
+                            </ol>
+                        </li>
+                        <li>
+                            <span>物品处理*</span>
+                            <div class="contraband-handle-div">
+                                <input class="contraband-handle" id="contrabandHandle" unselectable="on" readonly="readonly" autocomplete="off" contenteditable="false" onclick="imgRemarks(this,1)"  type="text">
+                                <i onclick="imgRemarks(this,1)"></i>
+                            </div>
+                            <ol class="select-box handle-list">
+                                <li>暂存</li>
+                                <li>移交</li>
+                                <li>放弃</li>
+                                <li>正常</li>
+                            </ol>
+                        </li>
+
+                    </ul>
+                    <div class="textarea-tagging-box">
+                        <div class="textarea-box">
+                            <span>备注</span>
+                            <div>
+                                <textarea name="" class="remark-textarea" id="remarkTextarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="tagging-box">
+                            <div class="img-tagging transition-all" onclick="imgRemarksTagging()">
+                                <span>标注</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 开包实物拍摄 -->
+                    <div>
+                    
+                    	<object classid="clsid:AC036352-03EB-4399-9DD0-602AB1D8B6B9" id="PreviewOcx"  width="100%" height="350px" name="ocx" ></object>
+                    </div>	
+                    <div>
+                        <div class="entity-shot">
+                            <div class="click-entity-shot">
+                                <div class="shot-list-img-first" onclick="getImgList()" style="font-weight: bold;font-size: 14px;border: 1px solid #62a8ea">
+                                    
+                                    <div style="width: 80%;position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);text-align: center;color: #62a8ea;">
+                                        点击显示<br>
+                                        拍摄图片
+                                    </div>
+                                </div>
+                                <!--  <div class="shot-list-img">
+                                      <img onclick="imgBigFn(this)" src="../../image/unpack/unpack.png" alt="">
+                                      <i class="img-close-icon "></i>
+                                  </div>-->
+                            </div>
+                        </div>
+                        <div class="btn-entity-shot">
+                            <span><i></i>打印</span>
+                            <span onclick="allUpload()" class="transition-all">提交</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 监控 -->
+    <div id="cameraShootingBox" class="camera-shooting-box">
+        <div class="camera-shooting">
+            <h3><span>拍摄</span><i class="camera-shooting-i icon wb-close" onclick="cameraImgModal(2)"></i></h3>
+            <div class="video-box" id="videoBox">
+               <!--  <div id="divPlugin">
+                </div> -->
+                
+                
+            </div>
+            <div class="btn-camera-shooting">
+                <span class="" onclick="CapturePicture()">拍摄</span>
+            </div>
+        </div>
+    </div>
+    <!--通知弹窗-->
+    <div class="notice-model success-notice">
+        <i class=" icon  wb-info-circle"></i>
+        <span>登陆信息过期，即将返回登陆页面重新登陆！</span>
+    </div>
+
+    <!-- 提示弹窗-->
+    <div class="pop-up-windows hint-windows exit">
+        <div class="shadow-window" onclick="$('.exit').hide()"></div>
+        <div class="vertical-center success" style="left: 54%;top: 40%;">
+            <div class="title">
+                <i class="icon wb-bell hint-icon"></i>
+                <span>你确定退出当前用户？</span>
+                <i class="icon wb-close close-pop" onclick="$('.exit').hide()"></i>
+            </div>
+            <div class="pop-button">
+                <span class="confirm-btn" onclick="loginout()">确定</span>
+                <span class="cancle-btn" onclick="$('.exit').hide()">取消</span>
+            </div>
+        </div>
+    </div>
+    <!-- 提示弹窗  end-->
+
+    <!--修改的弹窗（编辑弹窗）-->
+    <div class="pop-up-windows edit-windows add-order">
+        <div class="shadow-window" onclick="closeWindow()"></div>
+        <div class="pop-up-vertical-center pop-content" style="width: 40%;">
+            <div class="title">
+                <span>个人信息设置</span>
+                <span class="icon pe-close" onclick="closeWindow()"></span>
+            </div>
+            <div class="pop-body">
+                <form name="form" id="orderForm">
+                    <div class="pop-col">
+                        <div>
+                            <p style="margin: 13px 0;">旧密码</p>
+                            <input class="pop-input" id="oldPsd" autocomplete="off" name="oldPsd"
+                                   onkeyup="verifyFrom(this)"/>
+                            <span class="error-hint-text">输入旧密码</span>
+                        </div>
+                        <div>
+                            <p style="margin: 13px 0;">新密码</p>
+                            <input class="pop-input" id="newPsd" name="newPsd" autocomplete="off"
+                                   onkeyup="verifyFrom(this)"/>
+                            <span class="error-hint-text">输入新密码</span>
+                        </div>
+
+                    </div>
+                    <div class="pop-col">
+                        <div>
+                            <p style="margin: 13px 0;">确认新密码</p>
+                            <input class="pop-input" id="againPsd" name="againPsd" autocomplete="off"
+                                   onkeyup="verifyFrom(this)"/>
+                            <span class="error-hint-text">确认新密码</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="pop-footer">
+                <button class="pop-submit" onclick="postSetting()">提交</button>
+                <button class="pop-cancle" onclick="closeWindow()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!--图片大图弹窗-->
+    <div class="img-big-box" id="imgBigBox">
+        <div></div>
+        <div class="img-big">
+            <img src="../../image/unpack/zanwei.jpg" alt="">
+        </div>
+    </div>
+    <div id="loginHint" class="notice-model">
+        <i class="icon  wb-info-circle"></i>
+        <span></span>
+    </div>
+
+</div>
+
+
+<script src="../../lib/jquery-2.0.1.min.js"></script>
+<!-- WebSocket -->
+<script src="../../js/unpack/sockjs.min.js"></script>
+<script src="../../js/unpack/stomp.min.js"></script>
+<!-- WebSocket -->
+
+<!-- 视频 -->
+<script src="../../js/webVideo/webVideoCtrl.js"></script>
+<!-- 视频 -->
+
+<script src="../../lib/laydate/laydate.js"></script>
+<script src="../../lib/html2canvas.js"></script>
+<script src="../../js/unpack/jcanvas.js"></script>
+<script src="../../js/Utils.js"></script>
+<script src="../../lib/js/jquery.webcam.min.js"></script>
+<script src="../../js/com.js"></script>
+<script src="../../js/unpack/unpack.js?1"></script>
+
+</body>
+</html>

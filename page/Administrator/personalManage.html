@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>人员管理</title>
+		<link rel="stylesheet" href="../../css/com.css" />
+		<link rel="stylesheet" href="../../fonts/7-stroke/7-stroke.css" />
+		<link rel="stylesheet" href="../../fonts/font-awesome/font-awesome.css" />
+		<link rel="stylesheet" href="../../fonts/glyphicons/glyphicons.css" />
+		<link rel="stylesheet" href="../../fonts/ionicons/ionicons.css" />
+		<link rel="stylesheet" href="../../fonts/material-design/material-design.css" />
+		<link rel="stylesheet" href="../../fonts/mfglabs/mfglabs.css" />
+		<link rel="stylesheet" href="../../fonts/octicons/octicons.css" />
+		<link rel="stylesheet" href="../../fonts/open-iconic/open-iconic.css" />
+		<link rel="stylesheet" href="../../fonts/themify/themify.css" />
+		<link rel="stylesheet" href="../../fonts/weather-icons/weather-icons.css" />
+		<link rel="stylesheet" href="../../fonts/web-icons/web-icons.css" />
+		<link rel="stylesheet" href="../../lib/css/imgPlugin.css" />
+		<link rel="stylesheet" type="text/css" href="../../lib/justTip/just-tip.css" />
+		<link rel="stylesheet" href="../../css/Administrator/personalManage.css" />
+	</head>
+
+	<body>
+		<!--头部-->
+		<header>
+			<div class="logo"></div>
+			<div class="user-operate" id="headerMenu">
+				<!--<span><i class="icon wb-user"></i>个人设置</span>
+				<span><i class="icon fa-sign-out"></i>用户名</span>-->
+			</div>
+		</header>
+
+		<!--菜单-->
+		<div class="menu" id="menuList">
+
+		</div>
+
+		<!--人员管理-->
+		<section class="main" id="mainContainer" v-cloak>
+			<div class="el-loading-mask" style="top: 150px;bottom: 20px;left: 20px;right: 20px;">
+				<div class="el-loading-spinner"><i class="icon fa-spinner"></i>
+					<p class="el-loading-text">拼命加载中</p>
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="row-title">
+						<!--筛选-->
+						<div class="panel">
+							<div class="panel-header">
+								<h3 class="panel-title">筛选及功能项</h3>
+							</div>
+							<div class="panel-body">
+								<button class="addbtn" type="button" @click="openEdit(null,1)">
+        							<span>
+        								<i class="icon wb-plus"></i> 新增
+        							</span>
+        						</button>
+								<div class="upLoad">
+									<input type="file" id="upFile" @change="upFile($event)" multiple="multiple" style="height: 0;display: none;" />
+									<button type="button" onclick="$('#upFile').click()" class="btn upload">
+        						    	<span>
+        						    		<i class="icon wb-upload"></i>
+        						    	        导入
+        						    	</span>
+        						    </button>
+								</div>
+								<a target="_self" class="pd-download">
+									<!--href="http://192.168.1.216:9091/downLoad"-->
+									<button type="button" class="btn download">
+        							<span>
+        								<i class="icon wb-download">
+        								</i>
+        								下载模板
+        							</span>
+        							</button>
+								</a>
+
+								<div class="panel-right">
+
+									<div class="selectG-box">
+										<span style="display: inline-block;">分组</span>
+										<div class="pop-select GroupSelect" @click="showSelect(1)" style="display: inline-block;">
+
+											<input type="text" disabled="disabled" style="height: 21px;cursor: pointer;" placeholder="全部" readonly="readonly" contenteditable="false" autocomplete="off" v-model="selectGroup" name="carryPerson" />
+											<span class="select-icon">
+                                	        <i class="icon wb-triangle-down icon-grey"></i>
+                                            </span>
+											<div id="ulhtml" style="position: absolute;margin-top: 3px;">
+												<!--<ul class="pop-ul" v-show="selectGroupShow" style="margin-left: 33px;line-height: 22px">
+											<li @click="chooseGroup(all,1)">{{all}}</li>
+											<li v-for="j in groups" @click="chooseGroup(j.label,1)" @mouseover="ulShow=true">{{j.label}}
+												<ul class="pop-ul" v-show="ulShow" style="margin-left: 152px;z-index: 200;top: 37px;" v-if="j.children.length>0">
+													<li v-for="i in j.children" @click.stop="chooseGroup(i.label,1);">{{i.label}}</li>
+												</ul>
+											</li>
+										    </ul>-->
+											</div>
+										</div>
+
+									</div>
+
+									<div class="selectR-box">
+										<span style="display: inline-block;">角色</span>
+										<div class="pop-select RoleSelect" @click="showSelect(2)" style="display: inline-block;">
+											<input type="text" disabled="disabled" style="height: 21px;cursor: pointer;" placeholder="全部" readonly="readonly" autocomplete="off" v-model="selectRole" name="carryPerson" />
+											<span class="select-icon">
+                                	    <i class="icon wb-triangle-down icon-grey"></i>
+                                       </span>
+										</div>
+										<ul class="pop-ul" v-show="selectRoleShow" style="margin-left: 33px;line-height: 22px;">
+											<li @click="chooseGroup(all,2)">{{all}}</li>
+											<li v-for="j in roles" @click="chooseGroup(j,2)">{{j}}</li>
+										</ul>
+									</div>
+									<div class="search-input">
+										<div class="search">
+											<input id="conditions" placeholder="按电话、姓名、人员ID查询" v-model="conditions" type="text" @focus="addborder()" @blur="compareValue()" @keyup.enter="findByConditions()" />
+										</div>
+										<span class="search-icon" @click="findByConditions()">
+        								        <i class="icon glyphicon glyphicon-search " ></i>
+        							    </span>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+					<!--表格内容-->
+					<div class="row-body">
+						<div class="table-container">
+							<table class="table">
+								<thead>
+									<tr class="table-title">
+										<th width="15%">人员ID</th>
+										<th width="10%">人员卡号</th>
+										<th width="10%">姓名</th>
+										<th width="10%">电话</th>
+										<th width="20%">分组</th>
+										<th width="15%">角色</th>
+										<th width="20%">操作</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="item in items">
+										<td>{{getJudgeFn(item.userid)}}</td>
+										<td>{{getJudgeFn(item.cardId)}}</td>
+										<td>{{getJudgeFn(decodeURI(item.username))}}</td>
+										<td>{{getJudgeFn(item.telphone)}}</td>
+										<td>{{getJudgeFn(decodeURI(item.groupName))}}</td>
+										<td v-if="decodeURI(item.roleName)=='管理员'||decodeURI(item.roleName)=='监控员'||decodeURI(item.roleName)=='系统员'">{{decodeURI(item.roleName)}}</td>
+										<td v-else></td>
+										<td class="td-icon">
+											<i class="icon wb-edit " data-name="编辑" @click="openEdit(item,2)"></i>
+											<i class="icon wb-close " data-name="删除" @click="openDelete(item)" v-if="item.userid!=='admin'"></i>
+											<template v-if="item.userid=='admin'">
+
+											</template>
+											<template v-else>
+												<i class="block" data-name="屏蔽" @click="openBlock(item,1)" v-if="item.staus==0"></i>
+												<i class="unblock " data-name="解除屏蔽" @click="openBlock(item,2)" v-else></i>
+											</template>
+
+											<i class="icon wb-unlock " data-name="重置密码" @click="openReset(item)"></i>
+
+										</td>
+									</tr>
+								</tbody>
+
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="row-floor">
+					<div class="footer clearfix">
+						<div class="fl" style="margin-left: 8px;">共{{total}}项</div>
+						<div id="paging" class="fr"></div>
+					</div>
+				</div>
+			</div>
+
+			<!--新增订单的弹窗（编辑弹窗）-->
+			<div class="pop-up-windows edit-windows add-order">
+				<div class="shadow-window" onclick="$('.add-order').hide();windowisOpen=false;"></div>
+				<div class="pop-up-vertical-center pop-content" style="width: 40%;">
+					<div class="title">
+						<span>{{title}}</span>
+						<span class="icon pe-close" onclick="$('.add-order').hide();windowisOpen=false;"></span>
+					</div>
+					<div class="pop-body">
+						<form name="form" id="orderForm">
+							<div class="pop-col">
+								<div>
+									<p>人员ID</p>
+									<input class="pop-input" maxlength="20" id="peopleNo" autocomplete="off" name="orderId" v-model="peopleId" oninput="verifyNumE(this)" v-if="editFlag===false" />
+									<input class="pop-input" maxlength="20" id="peopleNo" style="cursor: not-allowed;" autocomplete="off" name="orderId" v-model="peopleId" oninput="verifyNumE(this)" readonly="readonly" v-else />
+									<span class="error-hint-text">输入人员ID</span>
+								</div>
+								<div>
+									<p>姓名</p>
+									<input class="pop-input" maxlength="10" id="name" name="name" autocomplete="off" v-model="name" oninput="verifyFrom(this)" />
+									<span class="error-hint-text">输入姓名</span>
+								</div>
+							</div>
+							<div class="pop-col">
+								<div>
+									<p>人员卡号</p>
+									<input class="pop-input" id="cardId" name="cardId" v-model="cardId" autocomplete="off" oninput="verifyNum(this)" />
+									<span class="error-hint-text">输入人员卡号</span>
+								</div>
+								<div>
+									<p>电话</p>
+									<input class="pop-input" id="tel" name="num" maxlength="11" v-model="phone" autocomplete="off" oninput="verifyNum(this)" />
+									<span class="error-hint-text">输入电话</span>
+								</div>
+
+							</div>
+							<div class="pop-col">
+								<div>
+									<p>分组</p>
+									<div class="pop-select Group" @click="showSelect(3)">
+
+										<input id="group" placeholder="请选择" autocomplete="off" readonly="readonly"  v-model="group" name="carryPerson" />
+										<!--<input v-if="editFlag===true" disabled id="group" placeholder="请选择" readonly="readonly" autocomplete="off" v-model="group" name="carryPerson" />-->
+										<span class="select-icon">
+                                	    <i class="icon wb-triangle-down icon-grey"></i>
+                                       </span>
+									</div>
+									<div id="ulhtml_" style="position: absolute;margin-top: 3px;">
+										<!--<ul class="pop-ul" v-show="selectGroupShow" style="margin-left: 33px;line-height: 22px">
+											<li @click="chooseGroup(all,1)">{{all}}</li>
+											<li v-for="j in groups" @click="chooseGroup(j.label,1)" @mouseover="ulShow=true">{{j.label}}
+												<ul class="pop-ul" v-show="ulShow" style="margin-left: 152px;z-index: 200;top: 37px;" v-if="j.children.length>0">
+													<li v-for="i in j.children" @click.stop="chooseGroup(i.label,1);">{{i.label}}</li>
+												</ul>
+											</li>
+										</ul>-->
+									</div>
+									<span class="error-hint-text grouptext">分组不能为空</span>
+								</div>
+								<div>
+									<p>角色</p>
+									<div class="pop-select Role" @click="showSelect(4)">
+										<input id="role" placeholder="请选择" readonly="readonly" autocomplete="off" v-model="role" onblur="inputRBlur()" name="carryPerson" />
+										<span class="select-icon">
+                                	    <i class="icon wb-triangle-down icon-grey"></i>
+                                        </span>
+
+									</div>
+									<ul class="pop-ul" v-show="selectRShow">
+										<li @click="chooseGroup('请选择',4)">请选择</li>
+										<li v-for="j in roles" @click="chooseGroup(j,4)">{{j}}</li>
+									</ul>
+									<span class="error-hint-text roletext">选择角色</span>
+								</div>
+							</div>
+							<!--<div class="pop-col uploading-img" style="padding-top: 8px;">
+								<p>人员头像</p>
+								<ul class="echo-img">
+									<li>
+									<img src="../../lib/img/imgclose.png" class="close-img">
+									<img src="../../image/ddm-guzhanggaojing.png" class="image">
+									</li>
+								</ul>
+								<!--拍照-->
+							<!--<div class="z_photo upimg-div clear updata-img" style="width: auto" @click="openTakePhoto">
+									<section class="z_file fl">
+										<img src="../../image/Administrator/addPic.png" class="takePic" alt="addimg" />
+
+									</section>
+								</div>
+								<span class="error-hint-text please-upload-img" style="top: 87%;left: 20px;">请拍摄人员头像</span>
+							</div>-->
+						</form>
+					</div>
+
+					<div class="pop-footer">
+						<button class="pop-submit" onclick="postPeople()">提交</button>
+						<button class="pop-cancle" onclick="$('.add-order').hide();windowisOpen=false;">取消</button>
+					</div>
+				</div>
+			</div>
+
+			<!--拍照弹窗-->
+			<div class="pop-up-windows edit-windows photo">
+				<div class="shadow-window" onclick="$('.photo').hide();$('#webcam').html('');" style="background: none;"></div>
+				<div class="pop-up-vertical-center pop-content">
+					<div class="title">
+						<span>拍照</span>
+						<span class="icon pe-close" onclick="$('.photo').hide();$('#webcam').html('');"></span>
+					</div>
+					<div class="pop-body">
+						<div class="canvas">
+							<div class="video-canvas">
+								<!--<div id="webcam" style="margin-top: 14px;text-align: center;" width="600" height="600"></div>-->
+								<div id="webcam" style="margin-top: 14px;text-align: center;"></div>
+								<canvas id="canvas" width="320" height="240"></canvas>
+							</div>
+						</div>
+					</div>
+
+					<div class="pop-footer" style="text-align: center;">
+						<button class="pop-takepic">
+							<span pop>
+								<i class="icon fa-camera"></i> 拍摄
+							</span>
+						</button>
+
+					</div>
+				</div>
+			</div>
+
+			<!--图片预览-->
+			<div class="pop-up-windows edit-windows img-preview">
+				<div class="shadow-window" onclick="$('.img-preview').hide()"></div>
+				<div class="pop-up-vertical-center pop-content" style="width: 35%;">
+					<div class="title">
+						<span>图片预览</span>
+						<span class="icon pe-close" onclick="$('.img-preview').hide()"></span>
+					</div>
+					<div class="pop-body">
+						<img src="../../image/ddm-guzhanggaojing.png" id="imgPreview" style="width: 100%;height: 100%;" />
+					</div>
+				</div>
+			</div>
+			<!--图片预览  end-->
+
+			<!-- 提示弹窗-->
+			<div class="pop-up-windows hint-windows delete">
+				<div class="shadow-window" onclick="$('.delete').hide()"></div>
+				<div class="vertical-center success">
+					<div class="title">
+						<i class="icon wb-bell hint-icon"></i>
+						<span>你确定删除该 {{alertName}} 人员？</span>
+						<i class="icon wb-close close-pop" onclick="$('.delete').hide()"></i>
+					</div>
+					<div class="pop-button">
+						<span class="confirm-btn" @click="confirmFlag(1)">确定</span>
+						<span class="cancle-btn" onclick="$('.delete').hide()">取消</span>
+					</div>
+				</div>
+			</div>
+			<!-- 提示弹窗  end-->
+
+			<!-- 提示弹窗-->
+			<div class="pop-up-windows block-windows blockw">
+				<div class="shadow-window" onclick="$('.blockw').hide()"></div>
+				<div class="vertical-center success">
+					<div class="title">
+						<i class="icon wb-bell hint-icon"></i>
+						<span>你确定{{blockFlag}}该 {{blockName}} 人员？</span>
+						<i class="icon wb-close close-pop" onclick="$('.blockw').hide()"></i>
+					</div>
+					<div class="pop-button">
+						<span class="confirm-btn" @click="confirmFlag(2)">确定</span>
+						<span class="cancle-btn" onclick="$('.blockw').hide()">取消</span>
+					</div>
+				</div>
+			</div>
+			<!-- 提示弹窗  end-->
+
+			<!-- 提示弹窗-->
+			<div class="pop-up-windows block-windows reset">
+				<div class="shadow-window" onclick="$('.reset').hide()"></div>
+				<div class="vertical-center success">
+					<div class="title">
+						<i class="icon wb-bell hint-icon"></i>
+						<span>你确定重置该 {{resetName}} 人员密码？</span>
+						<i class="icon wb-close close-pop" onclick="$('.reset').hide()"></i>
+					</div>
+					<div class="pop-button">
+						<span class="confirm-btn" @click="confirmFlag(3)">确定</span>
+						<span class="cancle-btn" onclick="$('.reset').hide()">取消</span>
+					</div>
+				</div>
+			</div>
+			<!-- 提示弹窗  end-->
+			<!-- 提示弹窗-->
+			<div class="pop-up-windows hint-windows exit">
+				<div class="shadow-window" onclick="$('.exit').hide()"></div>
+				<div class="vertical-center success" style="left: 54%;">
+					<div class="title">
+						<i class="icon wb-bell hint-icon"></i>
+						<span>你确定退出当前用户？</span>
+						<i class="icon wb-close close-pop" onclick="$('.exit').hide()"></i>
+					</div>
+					<div class="pop-button">
+						<span class="confirm-btn" onclick="loginout()">确定</span>
+						<span class="cancle-btn" onclick="$('.exit').hide()">取消</span>
+					</div>
+				</div>
+			</div>
+			<!-- 提示弹窗  end-->
+			<!--登录提示-->
+			<div id="loginHint" class="notice-model">
+				<i class="icon  wb-info-circle"></i>
+				<span></span>
+			</div>
+
+		</section>
+
+		<script type="text/javascript" src="../../lib/jquery-2.0.1.min.js"></script>
+		<script type="text/javascript" src="../../lib/laydate/laydate.js"></script>
+		<script type="text/javascript" src="../../lib/yfslPageControl.js"></script>
+		<script type="text/javascript" src="../../lib/bootstrap.js"></script>
+		<script type="text/javascript" src="../../js/Utils.js"></script>
+		<script type="text/javascript" src="../../js/com.js"></script>
+		<script src="../../lib/vue.js"></script>
+		<script type="text/javascript" src="../../lib/justTip/justTools.js"></script>
+		<script src="../../lib/js/jquery.webcam.js"></script>
+		<script type="text/javascript" src="../../js/Administrator/personalManage.js"></script>
+	</body>
+
+</html>

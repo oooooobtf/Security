@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+    <meta http-equiv="Expires" content="0" />
+</head>
+<style type="text/css">
+    html, body {
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+    .plugin {
+        width: 300px;
+        height: 200px;
+        margin: 0 auto;
+    }
+</style>
+<body>
+<object classid="clsid:AC036352-03EB-4399-9DD0-602AB1D8B6B9" id="PreviewOcx"  width="455" height="350" name="ocx" ></object>
+
+</body>
+<script src="../../lib/jquery-2.0.1.min.js"></script>
+<script src="../../js/Utils.js"></script>
+<script src="../../js/webVideo/webVideoCtrl.js"></script>
+<script>
+    var videoWidth = '';
+    var videoHeight = '';
+    ///视频所需参数
+    var oLiveView = {
+        szIP: "172.22.100.20", // protocol ip
+        szPort: "80", // protocol port
+        szName: "admin", // device username
+        szPswd: "hk.201712",// device password
+        lCounts: 1,//窗口数目
+        CameraID: 1036,//监控点
+        lIndex: 1,//窗口index
+    };
+    var ipObj = JSON.parse(sessionStorage.getItem('ipObj'));
+    var documentWidth = sessionStorage.getItem('docWidth');
+    var num = window.location.href.split('=')[1];//当前iframe
+    console.log(window.location.href,num)
+	
+    var OCXobj;
+
+
+    //
+    videoFn(documentWidth);
+    function videoFn(documentWidth) {
+        if (documentWidth < 1423) {
+            videoWidth = 290;
+            videoHeight = 240;
+        } else if (1423 <= documentWidth && documentWidth <= 1582) {
+            videoWidth = 360;
+            videoHeight = 240;
+        } else if (1583 <= documentWidth && documentWidth <= 1902) {
+            videoWidth = 400;
+            videoHeight = 280;
+        } else if (1903 <= documentWidth &&documentWidth <= 1920) {
+            videoWidth = 500;
+            videoHeight = 280;
+        }
+        var wh = {
+            videoHeight: videoHeight,
+            videoWidth: videoWidth
+        };
+        var oPlugin1 = {
+            iWidth: wh.videoWidth,            // plugin width
+            iHeight: wh.videoHeight            // plugin height
+        };
+        $('.plugin').css({
+            width: wh.videoWidth,
+            height: wh.videoHeight
+        });
+        loginCMS();
+
+    }
+    /*****同步登录CMS******/
+    function loginCMS() {
+    	OCXobj = document.getElementById("PreviewOcx");
+        console.log(OCXobj)
+        var result = OCXobj.SetLoginType(0);    // 设置同步登入模式
+        console.log(oLiveView);
+        var ret = OCXobj.Login(oLiveView.szIP, oLiveView.szPort, oLiveView.szName, oLiveView.szPswd);
+
+        switch (ret) {
+            case 0:
+                //initCameraList();
+                //initTree();
+                console.log("同步登录成功！");
+                
+                setTimeout(function () {
+                    SetlocalParam();
+                    oLiveView.lIndex = num + 1;
+                    StartPlayView();
+                }, 1000);
+
+                showMethodInvokedInfo("同步Login,GetResourceInfo 接口调用成功！");
+                break;
+            case -1:
+                console.log("同步登录失败！");
+                showMethodInvokedInfo("同步Login接口调用失败！错误码：" + OCXobj.GetLastError());
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    //开始预览
+    function showMethodInvokedInfo(msg) {
+        Utils.noticeModelFn($('.notice-model'), msg, 2);
+    }
+    function StartPlayView() {
+        OCXobj = document.getElementById("PreviewOcx");
+        var ret = OCXobj.StartTask_Preview_InWnd(oLiveView.CameraID,oLiveView.lIndex);
+        switch (ret) {
+            case 0:
+                showMethodInvokedInfo("StartTask_Preview接口调用成功！");
+                break;
+            case -1:
+                showMethodInvokedInfo("StartTask_Preview接口调用失败！错误码：" + OCXobj.GetLastError());
+                break;
+            default:
+                break;
+        }
+    }
+    var picList;
+    //设置截图参数
+    function SetlocalParam() {
+        picList = {
+            PicType: 0,//0：jpg 1：bmp
+            PicPath: 'C:\\CapPic',//路径
+            PicCapType: 0,//按时间 按帧
+            PicSpanTime: 1,//抓图时间间隔,单位(ms)
+            PicCounts: 1//抓图张数
+        };
+        //0 C:\CapPic 0 1 1
+        //console.log(PicType, PicPath, PicCapType, PicSpanTime, PicCounts, RecordType, MaxRecordTimes, RecordTimes, RecordPath, RecordSize)
+        OCXobj = document.getElementById("PreviewOcx");
+
+        //设置图片保存路径和格式
+        if (picList.PicCapType == 0) {
+            var iRet = OCXobj.SetCaptureParam(picList.PicType, picList.PicPath, picList.PicCapType, picList.PicSpanTime, picList.PicCounts);
+            switch (iRet) {
+                case -1:
+                    showMethodInvokedInfo("SetCaptureParam接口调用失败！错误码：" + OCXobj.GetLastError());
+                    break;
+                case 0:
+                    showMethodInvokedInfo("SetCaptureParam接口调用成功！");
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+</script>
+</html>

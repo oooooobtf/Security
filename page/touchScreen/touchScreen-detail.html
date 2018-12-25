@@ -1,0 +1,563 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html lang="en" style="height: 100%;">
+
+	<head>
+		<meta charset="UTF-8">
+		<!--<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1, maximum-scale=1">-->
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="HandheldFriendly" content="true">
+		<!--<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">-->
+		<title>触摸屏安检</title>
+		<link rel="stylesheet" href="../../css/com.css" />
+		<link rel="stylesheet" href="../../fonts/7-stroke/7-stroke.css" />
+		<link rel="stylesheet" href="../../fonts/font-awesome/font-awesome.css" />
+		<link rel="stylesheet" href="../../fonts/glyphicons/glyphicons.css" />
+		<link rel="stylesheet" href="../../fonts/ionicons/ionicons.css" />
+		<link rel="stylesheet" href="../../fonts/material-design/material-design.css" />
+		<link rel="stylesheet" href="../../fonts/mfglabs/mfglabs.css" />
+		<link rel="stylesheet" href="../../fonts/octicons/octicons.css" />
+		<link rel="stylesheet" href="../../fonts/open-iconic/open-iconic.css" />
+		<link rel="stylesheet" href="../../fonts/themify/themify.css" />
+		<link rel="stylesheet" href="../../fonts/weather-icons/weather-icons.css" />
+		<link rel="stylesheet" href="../../fonts/web-icons/web-icons.css" />
+		<link rel="stylesheet" href="../../lib/laydate/theme/default/laydate.css" />
+		<link rel="stylesheet" href="../../lib/css/swiper-3.4.2.min.css" />
+		<link rel="stylesheet" href="../../css/touchScreen/touchScreen-detail.css?v=20180725" />
+		<link rel="stylesheet" href="../../css/com.css?v=20180725" />
+		<link rel="stylesheet" href="../../lib/css/softkeys-0.0.1.css" />
+
+	</head>
+
+	<body style="height: 100%;">
+		<!--<object classid="clsid:F1317711-6BDE-4658-ABAA-39E31D3704D3" style="float: right;" codebase="SDRdCard.cab#version=1,3,6,4" width=0 height=0 align=center hspace=0 vspace=0 id=idcard name=rdcard>
+        </object>-->
+		<div id="mainContainer" style="height: 100%;">
+			<!--登录提示-->
+			<div id="loginHint" class="notice-model-screen">
+				<div>
+					<i class="icon  wb-info-circle"></i>
+					<span></span>
+				</div>
+			</div>
+
+			<!--头部-->
+			<header>
+				<div class="search-left screen-header" onclick="returnBack()">
+					<div class="screen-time" style="display: inline-block;">
+						<span style="font-size: 20px;color: #ffffff;" id="time"></span>
+						<span style="font-size: 16px;color: #7adfb5;" id="date"></span>
+					</div>
+
+					<div class="screen-title">
+						<span>返回首页</span>
+					</div>
+
+				</div>
+
+			</header>
+
+			<!--新增运单弹窗-->
+			<div class="pop-up-windows edit-windows addorder">
+				<div class="shadow-window" onclick="cancelOrder()"></div>
+				<div class="pop-up-vertical-center pop-content" style="width: 53%;border-radius: 5px;">
+					<div class="title">
+						<span style="font-size: 18px;">编辑运单</span>
+
+					</div>
+					<div class="pop-body add-diag" style="overflow-y: scroll; padding-left: 66px;">
+						<form name="form" id="orderForm">
+							<div class="pop-col">
+								<div>
+									<p class="big">运单号</p>
+									<!--<input class="add-input " oninput="matchCompany()" id="orderno" v-model="orderNo" maxlength="12" autocomplete="off" name="orderNo" onkeyup="verifyFrom(this)" v-if="items.channelId==null" />-->
+									<input class="add-input " readonly="readonly" unselectable="on" id="orderno" v-model="orderNo" maxlength="12" autocomplete="off" name="orderNo" style="cursor: not-allowed;"/>
+									<span class="error-hint-text">输入运单号</span>
+								</div>
+								<div>
+									<p class="big">航班号</p>
+									<!--<input class="add-input" id="flightno" v-model="flightNo" maxlength="10" autocomplete="off" name="flightNo" onkeyup="verifyFrom(this)" v-if="items.channelId==null" />-->
+									<input class="add-input" readonly="readonly" unselectable="on" id="flightno" v-model="flightNo" maxlength="10" autocomplete="off" name="flightNo" onkeyup="verifyFrom(this)"/>
+									<span class="error-hint-text">输入航班号</span>
+								</div>
+							</div>
+							<div class="pop-col">
+								<div>
+									<p class="big">货物名称</p>
+									<!--<input class="add-input " id="productName" v-model="productName" maxlength="20" autocomplete="off" name="productName" onkeyup="verifyFrom(this)" v-if="items.channelId==null" />-->
+									<input class="add-input" readonly="readonly" unselectable="on" id="productName" v-model="productName" maxlength="20" autocomplete="off" name="productName" onkeyup="verifyFrom(this)" />
+									<span class="error-hint-text">输入货物名称</span>
+								</div>
+								<div>
+									<p class="big">总重量（kg）</p>
+									<input class="add-input " id="productWei" v-model="productWei" maxlength="5" autocomplete="off" name="productWei" onkeyup="verifyFrom(this)" />
+									<span class="error-hint-text">输入总重量</span>
+								</div>
+
+							</div>
+							<div class="pop-col">
+								<div>
+									<p class="big">件数</p>
+									<input class="add-input" id="count" oninput="verifyFrom(this)" v-model="count" maxlength="3" autocomplete="off" name="count" onkeyup="verifyFrom(this)" />
+									<span class="error-hint-text">输入件数</span>
+								</div>
+								<div>
+									<p class="big">目的地</p>
+									<!--<input class="add-input" id="endPlace" v-model="endPlace" maxlength="10" autocomplete="off" name="endPlace" onkeyup="verifyFrom(this)" v-if="items.channelId==null" />-->
+									<input class="add-input" id="endPlace" readonly="readonly" unselectable="on" v-model="endPlace" maxlength="10" autocomplete="off" name="endPlace" onkeyup="verifyFrom(this)" />
+									<span class="error-hint-text">输入目的地</span>
+								</div>
+
+							</div>
+							<div class="pop-col">
+								<div>
+									<p class="big">承运人</p>
+									<input class="add-input " unselectable="on" style="cursor: not-allowed;" id="carrier" maxlength="10" v-model="carryPeople" autocomplete="off" name="carryPeople" onkeyup="verifyFrom(this)" />
+								</div>
+
+								<div>
+									<div class="select-name">
+										<p>代理人</p>
+									</div>
+									<div class="select-down dropdown">
+										<div style="margin-left: 0;width: 73%;">
+											<!--<input type="button" v-if="items.channelId==null" id="proxyPerson" placeholder="请选择" v-model="proxyPerson" style="background-color: transparent;border: transparent; text-align: left;width: 84%;" class="dropdown-toggle" data-toggle="dropdown" readonly="readonly" />-->
+											<input type="button" id="proxyPerson" placeholder="请选择" v-model="proxyPerson" style="background-color: transparent;border: transparent; text-align: left;width: 84%;" readonly="readonly" />
+											<!--<span class="dropdown-toggle" data-toggle="dropdown" v-if="items.channelId==null">
+												<i class="icon wb-triangle-down"></i>
+											</span>-->
+											<span >
+												<i class="icon wb-triangle-down"></i>
+											</span>
+											<ul class="no-header down-content dropdown-menu proxy" style="left: 0;width: 73%;">
+												<li @click="chooseProxy(proxy)" v-for="proxy in proxyList">{{proxy.username}}</li>
+											</ul>
+										</div>
+										<span class="error-hint-text">请选择代理人</span>
+									</div>
+
+								</div>
+
+							</div>
+
+							<div class="pop-col ">
+
+								<div>
+									<p class="big">托运人</p>
+									<!--<input class="add-input " id="consignor" maxlength="10" v-model="consignor" autocomplete="off" name="consignor" onkeyup="verifyFrom(this)" v-if="items.channelId==null" />-->
+									<input class="add-input " id="consignor" readonly="readonly" unselectable="on" maxlength="10" v-model="consignor" autocomplete="off" name="consignor" onkeyup="verifyFrom(this)"/>
+									<span class="error-hint-text">输入托运人</span>
+								</div>
+								<div>
+									<p class="big">身份证号</p>
+									<!--<input class="add-input" id="idCardNo" v-model="idCardNo" maxlength="18" autocomplete="off" name="idCardNo" onkeyup="verifyFrom(this)" v-if="items.channelId==null" />-->
+									<input class="add-input" id="idCardNo" readonly="readonly" unselectable="on" v-model="idCardNo" maxlength="18" autocomplete="off" name="idCardNo" onkeyup="verifyFrom(this)" />
+									<span class="error-hint-text">输入身份证号</span>
+								</div>
+
+							</div>
+							<div class="pop-col">
+								<div>
+									<div class="select-name">
+										<p class="big">是否为危险品</p>
+									</div>
+									<div class="select-down dropdown">
+										<div style="margin-left: 0;">
+											<!--<input type="button" id="isDanger" v-model="isDanger" style="background-color: transparent;border: transparent; text-align: left;" class="dropdown-toggle" data-toggle="dropdown" v-if="items.channelId==null" readonly="readonly" />-->
+											<input type="button" id="isDanger" readonly="readonly" unselectable="on" v-model="isDanger" style="background-color: transparent;border: transparent; text-align: left;" readonly="readonly" />
+											<span class="dropdown-toggle" data-toggle="dropdown" v-if="items.channelId==null">
+												<i class="icon wb-triangle-down"></i>
+											</span>
+											<span v-else>
+												<i class="icon wb-triangle-down"></i>
+											</span>
+
+											<ul class="no-header down-content dropdown-menu channel-number" style="left: 0;">
+												<li onclick="chooseDanger(1)">是</li>
+												<li onclick="chooseDanger(0)">否</li>
+											</ul>
+										</div>
+										<span class="error-hint-text">请选择是否为危险品</span>
+									</div>
+								</div>
+							</div>
+							<div class="pop-col Time" v-show="timeShow">
+								<div>
+									<p>入库时间</p>
+									<div class="inTime-div">
+										<span style="background-color: #e4eaec;"><i class="iconmar icon wb-calendar"></i></span>
+										<span class="time-span" v-if="!inTime">请选择时间</span>
+										<input id="inTime" readonly="readonly" v-model="inTime" style="font-size: 14px;" unselectable="on"/>
+										<span style="background-color: #e4eaec;" onclick="deleteTime(this,1)" v-show="false"><i class="iconmar icon wb-close"></i></span>
+									</div>
+									<span class="error-hint-text">请选择入库时间</span>
+								</div>
+								<div>
+
+									<p>出库时间</p>
+									<div class="outTime-div">
+										<span style="background-color: #e4eaec;"><i class="iconmar icon wb-calendar"></i></span>
+										<span class="time-span" v-if="!outTime">请选择时间</span>
+										<input id="outTime" readonly="readonly" v-model="outTime"  style="font-size: 14px;" unselectable="on"/>
+										<span style="background-color: #e4eaec;" onclick="deleteTime(this,2)" v-show="false"><i class="iconmar icon wb-close"></i></span>
+									</div>
+									<span class="error-hint-text">请选择出库时间</span>
+								</div>
+							</div>
+							<div class="pop-col uploading-img">
+								<p>人脸拍照</p>
+								<ul class="echo-img" id="idFace">
+									<li>
+										<img src="../../lib/img/imgclose.png" class="close-img">
+									</li>
+								</ul>
+								<!--拍照-->
+								<!--<div class="z_photo upimg-div clear updata-img" style="width: auto" onclick="openTakePhoto(1)" v-if="items.channelId==null">-->
+								<div class="z_photo upimg-div clear updata-img" style="width: auto" onclick="openTakePhoto(1)" v-show="false">
+									<section class="z_file fl">
+										<img src="../../image/Administrator/addPic.png" class="takePic" alt="addimg" />
+									</section>
+									<span class="error-hint-text" style="white-space: nowrap;">请进行人脸拍照操作</span>
+								</div>
+
+							</div>
+
+							<div class="pop-col uploading-img">
+								<p>货运单拍照</p>
+								<ul class="echo-img" id="orderPaper">
+									<li>
+										<img src="../../lib/img/imgclose.png" class="close-img">
+									</li>
+								</ul>
+								<!--拍照-->
+								<div class="z_photo upimg-div clear updata-img" style="width: auto" onclick="openTakePhoto(2)" v-show="false">
+									<section class="z_file fl">
+										<img src="../../image/Administrator/addPic.png" class="takePic" alt="addimg" />
+									</section>
+									<span class="error-hint-text" style="white-space: nowrap;">请进行货运单拍照操作</span>
+								</div>
+
+							</div>
+
+						</form>
+					</div>
+
+					<div class="popfooter">
+						<div class="submitbtn" onclick="postOrder()">提交</div>
+						<div class="cancelbtn" onclick="cancelOrder()">取消 </div>
+					</div>
+				</div>
+
+				<!--拍照弹窗-->
+				<div class="pop-up-windows edit-windows photo" style="z-index: 200;">
+					<div class="shadow-window" onclick="closeDiag()" style="background: none;"></div>
+					<div class="pop-up-vertical-center pop-content">
+						<div class="title">
+							<span>拍照</span>
+							<span class="icon pe-close" onclick="closeDiag()"></span>
+						</div>
+						<div class="pop-body">
+							<object id="view1" type="application/x-eloamplugin" width="500" height="250" name="view"></object>
+						</div>
+						<div class="pop-footer" style="text-align: center;">
+							<button class="pop-takepic" onclick="Scan()">
+							<span>
+								<i class="icon fa-camera"></i> 拍摄
+							</span>
+						</button>
+
+						</div>
+					</div>
+				</div>
+				<!--人脸拍照弹窗-->
+				<div class="pop-up-windows edit-windows face-photo" style="z-index: 200;">
+					<div class="shadow-window" onclick="closeDiag(2)" style="background: none;"></div>
+					<div class="pop-up-vertical-center pop-content">
+						<div class="title">
+							<span>拍照</span>
+							<span class="icon pe-close" onclick="closeDiag(2)"></span>
+						</div>
+						<div class="pop-body">
+							<div class="canvas">
+								<div class="video-canvas">
+									<!--<div id="webcam" style="margin-top: 14px;text-align: center;" width="600" height="600"></div>-->
+									<div id="webcam" style="margin-top: 14px;text-align: center;"></div>
+									<canvas id="canvas" width="320" height="240"></canvas>
+								</div>
+							</div>
+
+						</div>
+						<div class="pop-footer" style="text-align: center;">
+							<button class="pop-takepic" onclick="TakePhoto()">
+							<span>
+								<i class="icon fa-camera"></i> 拍摄
+							</span>
+						</button>
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<section class="scene-content" style="height: 100%;" id="sceneContent" v-cloak>
+				<!--<div class="el-loading-mask">
+        <div class="el-loading-spinner"><i class="icon fa-spinner"></i>
+            <p class="el-loading-text">拼命加载中</p></div>
+        </div>-->
+				<!--运单-->
+				<div class="order" style="height: 100%;">
+					<!--<div class="order-detail">-->
+					<div :class="compareColor()">
+						<div class="order-detail-left" v-if="items.status==2">
+							正在安检
+						</div>
+						<div class="order-detail-left stopblock" v-if="items.status==3">
+							安检暂停
+						</div>
+
+						<div class="order-detail-right">
+							<div class="order-detail-title">
+								<div class="order-detail-id">运单号：{{items.orderId}}</div>
+								<div class="order-detail-btn edit" onclick="addorder()"><span>修改运单</span></div>
+								<div class="order-detail-btn delete" onclick="$('.dialog-figure-delete').show()" v-if="items.status==0"><span>删除运单</span></div>
+							</div>
+							<div class="order-detail-content">
+								<div class="order-detail-flight">航班号：{{items.flightId}}</div>
+								<div class="order-detail-company">承运人：{{items.carryPerson}}</div>
+								<div class="order-detail-conPerson">托运人：{{items.consignor}}</div>
+								<br>
+								<div class="order-detail-productName">货物名称：{{items.cargoName}}</div>
+								<div class="order-detail-num">数量（件）：{{items.num}}</div>
+								<div class="order-detail-productWei">总重量：{{items.weight}}kg</div>
+								<br>
+								<div class="order-detail-endPlace">是否为危险品：{{items.dangerous===0?'否':'是'}}</div>
+								<div class="order-detail-inTime" v-if="items.isDanger==='是'">入库时间：{{items.inTime}}</div>
+								<div class="order-detail-outTime" v-if="items.isDanger==='是'">出库时间：{{items.outTime}}</div>
+								<div class="order-detail-endPlace">目的地：{{items.flightTerminal}}</div>
+								<div class="order-detail-channelId">通道号：{{items.channelId===null?"暂无":items.channelId}}</div>
+								<div class="order-detail-idCardNo">身份证号：{{items.proxyIcno}}</div>
+								<br>
+								<div class="order-detail-idCard">
+									<span style="vertical-align: top;">人脸图片：</span>
+									<img :src="img" style="max-height: 100px;max-width: 100px;margin-right: 10px;border: 1px solid green;border-radius: 3px;" v-for="(img,index) in items.icPhotos" onclick="showDetailsImg(this)" />
+								</div>
+								<br>
+								<div class="order-detail-orderPaper">
+
+									<span style="vertical-align: top;">货运单图片：</span>
+									<img :src="img" style="max-height: 100px;max-width: 100px;margin-right: 10px;border: 1px solid green;border-radius: 3px;" v-for="(img,index) in items.trackingPhotos" onclick="showDetailsImg(this)"/>
+
+								</div>
+							</div>
+							<div class="order-detail-time">
+								<div class="order-detail-create">运单创建时间：{{items.createTime==""?"暂无":items.createTime}}</div>
+								<div class="order-detail-start">开始安检时间：{{items.startTime==""?"暂无":items.startTime}}</div>
+								<div class="order-detail-pause">最近暂停时间：{{items.lastPauseTime==""?"暂无":items.lastPauseTime}}</div>
+							</div>
+							<div class="order-attention" v-if="items.status===2">
+								<span class="attention-icon"></span>
+								<span class="attention-text">将货物按照规范搬到传送带上，并开启传送带开关，必须结束当前正在安检的运单，才可以开始下一单。</span>
+							</div>
+							<!--2进行中-->
+							<div class="order-footer" v-if="items.status==2">
+								<div class="order-btn endbtn" onclick="$('.dialog-figure-alert').show()">结束</div>
+								<div class="order-btn stopbtn" onclick="stopSeurity()">暂停</div>
+								<!--<div class="order-btn startbtn">开始</div>-->
+							</div>
+							<div class="order-footer" v-if="items.status==0||items.status==3">
+								<div class="order-btn startbtn" onclick="checkSecurity()">开始</div>
+								<!--<div class="order-btn startbtn">开始</div>-->
+							</div>
+						</div>
+					</div>
+
+					<!--<div class="order-footer">
+          		<div class="order-btn startbtn">开始</div>
+          	</div>-->
+				</div>
+				<!--订单进行中提示框-->
+				<div class="pop-up-window dialog-figure-go">
+					<div class="shadow-window" onclick="$('.dialog-figure-go').hide()"></div>
+					<div class="dialog-alert">
+						<div class="dialog-header-alert">
+							<i class="icon wb-bell dialog-closebtn-alert" onclick="$('.dialog-figure-go').hide()"></i> 提示信息
+						</div>
+						<div class="dialog-body-alert">
+							<h3>有订单在进行中，必须暂停或结束当前正在安检的运单后，才可以开始下一单！</h3>
+						</div>
+						<div class="dialog-footer-go">
+							<button class="affirmbtn" onclick="$('.dialog-figure-go').hide()">
+                            <span>确认</span>
+                            </button>
+						</div>
+					</div>
+				</div>
+
+				<!--承运人筛选弹框-->
+				<div class="pop-up-window dialog-figure-carry">
+					<div class="shadow-window" onclick="closeCarrySelect()"></div>
+					<div class="dialog">
+						<div class="dialog-header">
+							<span class="dialog-title">请选择承运人（可单选）</span>
+						</div>
+						<div class="dialog-body">
+							<!--loading-->
+							<div class="el-loading-mask1">
+								<div class="el-loading-spinner margintop"><i class="icon fa-spinner"></i>
+									<p class="el-loading-text">拼命加载中</p>
+								</div>
+							</div>
+							<!--loading结束-->
+						</div>
+						<div class="dialog-footer">
+							<button class="footerbtn" onclick="affirmCompany()">
+                    <span>确认</span>
+                    </button>
+							<button class="deletebtn" onclick="closeCarrySelect()">
+                    <span>取消</span>
+                    </button>
+						</div>
+					</div>
+				</div>
+
+				<!--<!-- 提示弹窗-->
+				<!--<div class="pop-up-windows hint-windows hw-delete">
+					<div class="shadow-window" onclick="$('.hint-windows').hide()"></div>
+					<div class="vertical-center success" style="height: 200px;">
+						<div class="title" style="color: #f96868;font-size: 28px;">
+							<i class="icon wb-bell hint-icon" style="font-size: 28px;"></i>
+							你确定删除该运单？
+							<span id="deletHint"></span>
+							<i class="icon wb-close close-pop" onclick="$('.hint-windows').hide()" style="font-size: 28px;"></i>
+						</div>
+						<div class="pop-button">
+							<span class="confirm-btn" onclick="confirmDeleteOrder()">确定</span>
+							<span class="cancle-btn" onclick="$('.hint-windows').hide()">取消</span>
+						</div>
+					</div>
+				</div>-->
+				<!-- 提示弹窗  end-->
+
+				<!--结束弹框-->
+				<div class="pop-up-window dialog-figure-delete">
+					<div class="shadow-window" onclick="$('.dialog-figure-delete').hide()"></div>
+					<div class="dialog-alert">
+						<div class="dialog-header-alert">
+							<i class="icon wb-bell dialog-closebtn-alert" onclick="$('.dialog-figure-delete').hide()"></i> 提示信息
+						</div>
+						<div class="dialog-body-alert">
+							<h3>确定删除该 {{items.orderId}} 运单？</h3>
+						</div>
+						<div class="dialog-footer-alert">
+							<button class="affirmbtn" onclick="deleteOrder()">
+                             <span>确认</span>
+                             </button>
+							<button class="cancelbtn_" onclick="$('.dialog-figure-delete').hide()">
+                             <span>取消</span>
+                             </button>
+						</div>
+					</div>
+				</div>
+				<!---->
+
+				<!--结束弹框-->
+				<div class="pop-up-window dialog-figure-alert">
+					<div class="shadow-window" onclick="$('.dialog-figure-alert').hide()"></div>
+					<div class="dialog-alert">
+						<div class="dialog-header-alert">
+							<i class="icon wb-bell dialog-closebtn-alert" onclick="$('.dialog-figure-alert').hide()"></i> 提示信息
+						</div>
+						<div class="dialog-body-alert">
+							<h3>该运单将从界面上消失，确定结束安检？</h3>
+						</div>
+						<div class="dialog-footer-alert">
+							<button class="affirmbtn" onclick="endSecurity()">
+                             <span>确认</span>
+                             </button>
+							<button class="cancelbtn_" onclick="$('.dialog-figure-alert').hide()">
+                             <span>取消</span>
+                             </button>
+						</div>
+					</div>
+				</div>
+				<!---->
+
+				<!--图片预览-->
+				<div class="pop-up-windows edit-windows img-preview">
+					<div class="shadow-window" onclick="$('.img-preview').hide()"></div>
+					<div class="pop-up-vertical-center pop-content" style="width: 50%;">
+						<div class="title">
+							<span>图片预览</span>
+							<span class="icon pe-close" onclick="$('.img-preview').hide()"></span>
+						</div>
+						<div class="pop-body" style="overflow-y: scroll;">
+							<img src="../../image/ddm-guzhanggaojing.png" id="imgPreview" onclick="$('.img-preview').hide()" />
+						</div>
+					</div>
+				</div>
+
+				<!--图片预览  end-->
+
+				<!--<div class="order-play stop">
+           	  <div class="order-title">
+           	  	880-87654321
+           	  </div>
+           	  <div class="order-text">
+           	  	<div class="order-text-left">
+           	  		<span class="order-flight">MH520</span>
+           	  		<span class="order-count">15件</span>
+           	  		<span class="order-company">中国航空有限公司</span>
+           	  	</div>
+           	  	<div class="order-text-right stopcolor">
+           	  		正在安检
+           	  	</div>
+           	  </div>
+           	  
+           </div>-->
+
+				<!--<div class="order-play default">
+           	  <div class="order-title">
+           	  	880-87654321
+           	  </div>
+           	  <div class="order-text">
+           	  	<div class="order-text-left">
+           	  		<span class="order-flight">MH520</span>
+           	  		<span class="order-count">15件</span>
+           	  		<span class="order-company">中国航空有限公司</span>
+           	  	</div>
+           	  
+           	  </div>
+           	  
+           </div>-->
+
+				<!--页码-->
+				<!--<footer class="footer-page">
+					<div :class="comparePage(list.currentPage,index)" v-for="(pages,index) in list.totalPage" @click="changePage(index+1)">
+						{{index+1}}
+					</div>
+				</footer>-->
+
+			</section>
+
+		</div>
+		<script type="text/javascript" src="../../lib/jquery-2.0.1.min.js"></script>
+		<script type="text/javascript" src="../../js/Utils.js"></script>
+		<script type="text/javascript" src="../../lib/vue.js"></script>
+		<script type="text/javascript" src="../../lib/laydate/laydate.js"></script>
+		<script type="text/javascript" src="../../lib/yfslPageControl.js"></script>
+		<script type="text/javascript" src="../../lib/bootstrap.js"></script>
+		<script type="text/javascript" src="../../js/touchScreen/touchScreen-detail.js?v=20180725"></script>
+		<script type="text/javascript" src="../../lib/swiper-3.4.2.min.js"></script>
+		<script type="text/javascript" src="../../lib/js/sockjs.min.js"></script>
+		<script src="../../lib/js/jquery.webcam.js"></script>
+		<script type="text/javascript" src="../../lib/js/stomp.min.js"></script>
+		<script type="text/javascript" src="../../lib/softkeys-0.0.1.js?v=20180725"></script>
+		<script for=idcard event="Readed()">
+			//alert('Readed');
+			getinfo_onclick();
+		</script>
+	</body>
+
+</html>

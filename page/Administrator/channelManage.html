@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>通道管理</title>
+		<link rel="stylesheet" href="../../css/com.css" />
+		<link rel="stylesheet" href="../../fonts/7-stroke/7-stroke.css" />
+		<link rel="stylesheet" href="../../fonts/font-awesome/font-awesome.css" />
+		<link rel="stylesheet" href="../../fonts/glyphicons/glyphicons.css" />
+		<link rel="stylesheet" href="../../fonts/ionicons/ionicons.css" />
+		<link rel="stylesheet" href="../../fonts/material-design/material-design.css" />
+		<link rel="stylesheet" href="../../fonts/mfglabs/mfglabs.css" />
+		<link rel="stylesheet" href="../../fonts/octicons/octicons.css" />
+		<link rel="stylesheet" href="../../fonts/open-iconic/open-iconic.css" />
+		<link rel="stylesheet" href="../../fonts/themify/themify.css" />
+		<link rel="stylesheet" href="../../fonts/weather-icons/weather-icons.css" />
+		<link rel="stylesheet" href="../../fonts/web-icons/web-icons.css" />
+		<!--<link rel="stylesheet" href="../../lib/css/imgPlugin.css" />-->
+		<link rel="stylesheet" href="../../lib/justTip/just-tip.css" />
+		<!--<link rel="stylesheet" type="text/css" href="../../lib/css/tooltip.css"/>-->
+		
+		<link rel="stylesheet" href="../../css/Administrator/channelManage.css" />
+	</head>
+
+	<body>
+		<!--头部-->
+		<header>
+			<div class="logo"></div>
+			<div class="user-operate" id="headerMenu">
+				<!--<span><i class="icon wb-user"></i>个人设置</span>
+				<span><i class="icon fa-sign-out"></i>用户名</span>-->
+			</div>
+		</header>
+
+		<!--菜单-->
+		<div class="menu" id="menuList">
+			
+		</div>
+
+		<!--通道管理-->
+		<section class="main" id="mainContainer" v-cloak>
+			<div class="el-loading-mask" style="top: 150px;bottom: 20px;left: 20px;right: 20px;">
+				<div class="el-loading-spinner"><i class="icon fa-spinner"></i>
+					<p class="el-loading-text">拼命加载中</p>
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="row-title">
+						<!--筛选-->
+						<div class="panel">
+							<div class="panel-header">
+								<h3 class="panel-title">筛选及功能项</h3>
+							</div>
+							<div class="panel-body">
+								<div class="search-left color-content" style="display: none">
+									<span class="state">状态</span>
+									<div class="state-list">
+										<span class="state-active" style="width: 86px;" @click="selectStatus($event,0)">
+                                            <i  style="opacity: 1;"></i>
+                                            <a >全部</a>
+                                        </span>
+										<span class="" style="width: 64px;" @click="selectStatus($event,1)">
+											<i style="opacity: 0;"></i>
+                                            <a >异常</a>
+                                        </span>
+										<span class="" style="width: 64px;" @click="selectStatus($event,2)"><i style="opacity: 0;">
+										    </i><a>正常</a>
+										</span>
+									</div>
+								</div>
+
+								<button class="addbtn" @click="openEdit(null,1)">
+        							<span>
+        								<i class="icon wb-plus"></i> 新增通道
+        							</span>
+        						</button>
+
+							</div>
+						</div>
+
+					</div>
+					<!--表格内容-->
+					<div class="row-body">
+						<div class="table-container">
+							<table class="table">
+								<thead>
+									<tr class="table-title">
+										<th width="40%">通道号</th>
+										<th width="40%">截屏卡IP地址</th>
+
+										<th width="10%">操作</th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="item in items">
+										<td>{{item.channelId}}</td>
+										<td  class="channelIP">{{item.channelAddress}}
+											<div style="display: none" v-if="item.channelStatus=='异常'">
+											    <span class="unnormal">
+                                                <i></i>
+                                                <a>异常</a>
+                                                </span>
+											</div>
+											<div style="display: none" v-else>
+												<span class="normal">
+                                                <i></i>
+                                                <a>正常</a>
+                                                </span>
+											</div>
+										</td>
+										<td class="td-icon">
+											<!--<i class="icon wb-edit tip-hotspot" data-tip="编辑" @click="openEdit(item,2)"></i>
+											<i class="icon wb-close tip-hotspot" data-tip="删除" @click="openDelete(item)"></i>-->
+											<i class="icon wb-edit " data-name="编辑" @click="openEdit(item,2)"></i>
+											<i class="icon wb-close " data-name="删除" @click="openDelete(item)"></i>
+										</td>
+									</tr>
+								</tbody>
+
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="row-floor">
+					<div class="footer clearfix">
+						<div class="fl" style="margin-left: 8px;">共{{total}}项</div>
+						<div id="paging" class="fr"></div>
+					</div>
+				</div>
+			</div>
+
+			<!--新增订单的弹窗（编辑弹窗）-->
+			<div class="pop-up-windows edit-windows add-order">
+				<div class="shadow-window" onclick="$('.add-order').hide()"></div>
+				<div class="pop-up-vertical-center pop-content" style="width: 40%;">
+					<div class="title">
+						<span>{{title}}</span>
+						<span class="icon pe-close" onclick="$('.add-order').hide()"></span>
+					</div>
+					<div class="pop-body">
+						<form name="form" id="orderForm">
+							<div class="pop-col">
+								<div>
+									<p>通道号</p>
+									<input class="pop-input" maxlength="10" id="channelId" autocomplete="off" name="orderId" v-model="channelId" onkeyup="verifyFrom(this)" />
+									<span class="error-hint-text">输入通道号</span>
+								</div>
+								<div>
+									<p>IP地址</p>
+									<input class="pop-input" oninput="verifyip(this)"  maxlength="15" id="Ip" name="flightId" autocomplete="off"  v-model="channelIp" onkeyup="verifyFrom(this)" />
+									<span class="error-hint-text">输入正确的IP地址</span>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<div class="pop-footer">
+						<button class="pop-submit" onclick="postPeople()">提交</button>
+						<button class="pop-cancle" onclick="$('.add-order').hide()">取消</button>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- 提示弹窗-->
+			<div class="pop-up-windows hint-windows delete">
+				<div class="shadow-window" onclick="$('.delete').hide()"></div>
+				<div class="vertical-center success">
+					<div class="title">
+						<i class="icon wb-bell hint-icon"></i>
+						<span>你确定删除该 {{alertName}} 通道？</span>
+						<i class="icon wb-close close-pop" onclick="$('.delete').hide()"></i>
+					</div>
+					<div class="pop-button">
+						<span class="confirm-btn" @click="confirmFlag(1)">确定</span>
+						<span class="cancle-btn" onclick="$('.delete').hide()">取消</span>
+					</div>
+				</div>
+			</div>
+			<!-- 提示弹窗  end-->
+			
+            <!-- 提示弹窗-->
+			<div class="pop-up-windows hint-windows exit">
+				<div class="shadow-window" onclick="$('.exit').hide()"></div>
+				<div class="vertical-center success" style="left: 54%;">
+					<div class="title">
+						<i class="icon wb-bell hint-icon"></i>
+						<span>你确定退出当前用户？</span>
+						<i class="icon wb-close close-pop" onclick="$('.exit').hide()"></i>
+					</div>
+					<div class="pop-button">
+						<span class="confirm-btn" onclick="loginout()">确定</span>
+						<span class="cancle-btn" onclick="$('.exit').hide()">取消</span>
+					</div>
+				</div>
+			</div>
+			<!-- 提示弹窗  end-->
+			<!--登录提示-->
+			<div id="loginHint" class="notice-model">
+				<i class="icon  wb-info-circle"></i>
+				<span></span>
+			</div>
+
+		</section>
+
+		<script type="text/javascript" src="../../lib/jquery-2.0.1.min.js"></script>
+		<script type="text/javascript" src="../../lib/laydate/laydate.js"></script>
+		<script type="text/javascript" src="../../lib/yfslPageControl.js"></script>
+		<script type="text/javascript" src="../../lib/bootstrap.js"></script>	
+		<script type="text/javascript" src="../../js/Utils.js"></script>
+		<script type="text/javascript" src="../../js/com.js"></script>
+		<script src="../../lib/vue.js"></script>
+		<script src="../../lib/justTip/justTools.js"></script>
+		<!--<script src="../../lib/js/tooltip.js" type="text/javascript" ></script>-->
+		
+		<script type="text/javascript" src="../../js/Administrator/channelManage.js"></script>
+	</body>
+
+</html>

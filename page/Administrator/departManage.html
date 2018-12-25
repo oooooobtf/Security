@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>部门管理</title>
+		<link rel="stylesheet" href="../../css/com.css" />
+		<link rel="stylesheet" href="../../fonts/7-stroke/7-stroke.css" />
+		<link rel="stylesheet" href="../../fonts/font-awesome/font-awesome.css" />
+		<link rel="stylesheet" href="../../fonts/glyphicons/glyphicons.css" />
+		<link rel="stylesheet" href="../../fonts/ionicons/ionicons.css" />
+		<link rel="stylesheet" href="../../fonts/material-design/material-design.css" />
+		<link rel="stylesheet" href="../../fonts/mfglabs/mfglabs.css" />
+		<link rel="stylesheet" href="../../fonts/octicons/octicons.css" />
+		<link rel="stylesheet" href="../../fonts/open-iconic/open-iconic.css" />
+		<link rel="stylesheet" href="../../fonts/themify/themify.css" />
+		<link rel="stylesheet" href="../../fonts/weather-icons/weather-icons.css" />
+		<link rel="stylesheet" href="../../fonts/web-icons/web-icons.css" />
+
+		<link rel="stylesheet" href="../../lib/css/imgPlugin.css" />
+		<link rel="stylesheet" href="../../css/Administrator/departManage.css" />
+	</head>
+
+	<body>
+		<!--头部-->
+		<header>
+			<div class="logo"></div>
+			<div class="user-operate" id="headerMenu">
+				<!--<span><i class="icon wb-user"></i>个人设置</span>
+				<span class="username" onclick="$('.hint-windows').show()"><i class="icon fa-sign-out " ></i>用户名</span>-->
+			</div>
+		</header>
+
+		<!--菜单-->
+		<div class="menu" id="menuList">
+
+		</div>
+
+		<!--通道管理-->
+		<section class="main" id="mainContainer" v-cloak>
+			<div class="container">
+				<div class="container-top">
+					<button class="btn save" @click="saveName()">保存</button>
+				</div>
+				<div class="container-row">
+					<div class="left-content">
+						<div class="depart-list" id="menulist">
+							<ul class="list-ul">
+								<li>
+									<a data-toggle="collapse" onclick="clickFirstMenu(this)" class="list-li">
+										<span class="caret"></span><span class="menu">请点击此处后在右编辑菜单</span>
+										<i></i>
+									</a>
+								</li>
+							</ul>
+							<!--<ul class="list-ul"> 
+								<li class="list-li" >
+									<span class="caret"></span>{{menuName}}
+									<i class="caret-right"></i>
+								</li>
+							</ul>-->
+						</div>
+					</div>
+					<div class="right-content">
+						<div class="list-msg">
+							<div class="msg-title">
+								<span>{{editMenu==""?menuTitles:editMenu}}</span><i class="icon glyphicon glyphicon-trash" @click="openDelete()"></i>
+							</div>
+							<div class="msg-input">
+								<p>名称：</p>
+								<input type="text"  maxlength="20" name="list" id="list" placeholder="菜单名称 " v-model="editMenu" class="input" onkeyup="verifyEvery(this)"/>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+			<!--新增菜单的弹窗（编辑弹窗）-->
+			<div class="pop-up-windows edit-windows add">
+				<div class="shadow-window" onclick="$('.add').hide();mainContainer.menu=''"></div>
+				<div class="pop-up-vertical-center pop-content" style="width: 30%;">
+					<div class="title">
+						<span>{{title}}</span>
+						<span class="icon pe-close" onclick="$('.add').hide();mainContainer.menu=''"></span>
+					</div>
+					<div class="pop-body">
+						<form name="form">
+							<div class="pop-col">
+								<div style="width: 60%;margin-left: 10px;">
+									<p>菜单名称</p>
+									<input class="input" maxlength="20" id="menu" placeholder="请输入" autocomplete="off" name="roleType" v-model="menu" onkeyup="verifyEvery(this)" />
+									<span class="error-hint-text">输入菜单名称</span>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<div class="pop-footer">
+						<button class="pop-submit" @click="postMenu()">提交</button>
+						<button class="pop-cancle" onclick="$('.add').hide();mainContainer.menu=''">取消</button>
+					</div>
+				</div>
+			</div>
+			<!-- 提示弹窗-->
+			<div class="pop-up-windows hint-windows exit">
+				<div class="shadow-window" onclick="$('.exit').hide()"></div>
+				<div class="vertical-center success" style="left: 54%;">
+					<div class="title">
+						<i class="icon wb-bell hint-icon"></i>
+						<span>你确定退出当前用户？</span>
+						<i class="icon wb-close close-pop" onclick="$('.exit').hide()"></i>
+					</div>
+					<div class="pop-button">
+						<span class="confirm-btn" onclick="loginout()">确定</span>
+						<span class="cancle-btn" onclick="$('.exit').hide()">取消</span>
+					</div>
+				</div>
+			</div>
+			<!-- 提示弹窗  end-->
+
+			<!-- 提示弹窗-->
+			<div class="pop-up-windows hint-windows delete">
+				<div class="shadow-window" onclick="$('.delete').hide()"></div>
+				<div class="vertical-center success">
+					<div class="title">
+						<i class="icon wb-bell hint-icon"></i>
+						<span>你确定删除该 {{alertName}} ？</span>
+						<i class="icon wb-close close-pop" onclick="$('.delete').hide()"></i>
+					</div>
+					<div class="pop-button">
+						<span class="confirm-btn" @click="deleteMenu()">确定</span>
+						<span class="cancle-btn" onclick="$('.delete').hide()">取消</span>
+					</div>
+				</div>
+			</div>
+			<!-- 提示弹窗  end-->
+
+			<!--登录提示-->
+			<div id="loginHint" class="notice-model">
+				<i class="icon  wb-info-circle"></i>
+				<span></span>
+			</div>
+
+		</section>
+
+		<script type="text/javascript" src="../../lib/jquery-2.0.1.min.js"></script>
+		<script type="text/javascript" src="../../lib/laydate/laydate.js"></script>
+		<script type="text/javascript" src="../../lib/yfslPageControl.js"></script>
+		<script type="text/javascript" src="../../lib/bootstrap.js"></script>
+		<script type="text/javascript" src="../../js/Utils.js"></script>
+		<script type="text/javascript" src="../../js/com.js"></script>
+		<script src="../../lib/vue.js"></script>
+		<script type="text/javascript" src="../../js/Administrator/departManage.js"></script>
+	</body>
+
+</html>

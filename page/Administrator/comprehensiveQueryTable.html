@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="Generator" content="EditPlus">
+    <meta name="Author" content="">
+    <meta name="Keywords" content="">
+    <meta name="Description" content="">
+    <title>综合查询运单详情</title>
+    <link rel="stylesheet" href="../../css/com.css"/>
+    <link rel="stylesheet" href="../../fonts/7-stroke/7-stroke.css"/>
+    <link rel="stylesheet" href="../../fonts/font-awesome/font-awesome.css"/>
+    <link rel="stylesheet" href="../../fonts/glyphicons/glyphicons.css"/>
+    <link rel="stylesheet" href="../../fonts/ionicons/ionicons.css"/>
+    <link rel="stylesheet" href="../../fonts/material-design/material-design.css"/>
+    <link rel="stylesheet" href="../../fonts/mfglabs/mfglabs.css"/>
+    <link rel="stylesheet" href="../../fonts/octicons/octicons.css"/>
+    <link rel="stylesheet" href="../../fonts/open-iconic/open-iconic.css"/>
+    <link rel="stylesheet" href="../../fonts/themify/themify.css"/>
+    <link rel="stylesheet" href="../../fonts/weather-icons/weather-icons.css"/>
+    <link rel="stylesheet" href="../../fonts/web-icons/web-icons.css"/>
+    <!--提示框-->
+    <link rel="stylesheet" href="../../lib/justTip/just-tip.css">
+
+    <link rel="stylesheet" href="../../css/Administrator/comprehensiveQueryTable.css">
+
+</head>
+<body>
+<div>
+    <!--头部-->
+    <header>
+        <div class="logo"></div>
+        <div class="user-operate" id="headerMenu">
+            <!--<span><i class="icon wb-user"></i>个人设置</span>
+            <span><i class="icon fa-sign-out"></i>用户名</span>-->
+        </div>
+    </header>
+
+    <!--菜单-->
+    <div class="menu" id="menuList">
+
+    </div>
+
+    <!--main-->
+    <section class="main" id="mainContainer">
+        <div class="main-box">
+            <div class="return-previous" onclick="getHistory()"><i
+                    class="icon wb-chevron-left"></i><span>返回到运单综合查询</span></div>
+            <!--运单详情-->
+            <div class="main-top">
+                <div class="mt-left">
+                    <i></i>
+                    <div>
+                        <span class="mt-left-waybill">运单号 <i></i></span>
+                        <span class="mt-left-num">件数：<i></i></span>
+                        <span class="mt-left-flight">航班：<i></i></span>
+                    </div>
+                    <div><span>安检人员 </span><span class="color-span mt-inspectors"></span></div>
+                </div>
+                <div class="mt-middle">
+                    <div>
+                        <span>通道号 </span>
+                        <span class="color-span mt-channel-number"></span>
+                    </div>
+                    <div class="mtm-margin-top">
+                        <span>开包人 </span>
+                        <span class="color-span mt-subcontractor"></span>
+                    </div>
+                </div>
+                <div class="mt-right">
+                    <div>
+                        <span>承运人 </span>
+                        <span class="color-span mtr-span mt-carrier"></span>
+                    </div>
+                    <div class="mtm-margin-top">
+                        <span>代理人 </span>
+                        <span class="color-span mtr-span mt-agent"></span>
+                    </div>
+                </div>
+            </div>
+            <!--运单进度 图片 视频-->
+            <div class="main-footer">
+                <!--运单进度-->
+                <div class="mf-progress-box">
+                    <div class="mfp-header"><i class="icon fa-circle-o"></i><span>运单进度</span></div>
+                    <div class="progress-box">
+                        <!-- <ul>
+                             <li class="progress-list">
+                                 <i class="start-time"></i>
+                                 <span></span>
+                                 <div class="progress-list-div">
+                                     <div><span class="ul-span">安检开始</span></div>
+                                     <div><span>2017-06-26 11:33:05</span></div>
+                                 </div>
+                             </li>
+                             <li class="progress-list">
+                                 <i class="end-time"></i>
+                                 &lt;!&ndash;<span></span>&ndash;&gt;
+                                 <div class="progress-list-div">
+                                     <div><span class="ul-span">安检结束</span></div>
+                                     <div><span>2017-06-26 11:33:05</span></div>
+                                 </div>
+                             </li>
+                         </ul>-->
+                    </div>
+                </div>
+                <!--图片-->
+                <div class="mf-img-box">
+                    <div class="mib-header">
+                        <ul class="img-ul-box">
+                            <li class="active">所有图片</li>
+                            <li>开包图片</li>
+                        </ul>
+                        <div class="">
+                            <div>（已选择<span class="li-num">0</span>张）</div>
+                            <div class="check-box">
+                                <input type="checkbox" onchange="getChecked(this)" id="inputUnchecked">
+                                <label for="inputUnchecked"></label>
+                                <span>全选</span>
+                            </div>
+                            <!--<div class="btn-empty">清空</div>-->
+                            <i target="" class="icon wb-download down_btn_a" id="downLoad"
+                               onclick="getDownloadPhoto()"></i>
+                        </div>
+                    </div>
+                    <!-- 图片列表 日期选择 -->
+                    <div class="mib-middle">
+                        <!--日期选择-->
+                        <div class="time-control">
+                            <div class="time-container">
+                                <span class="time-icon"><i class="iconmar icon wb-calendar"></i></span>
+                                <input id="screenTime" type="text" placeholder="请选择日期" class="time-input">
+                                <span class="overtime-icon img-icon-close"><i class="iconmar icon wb-close"></i></span>
+                            </div>
+                        </div>
+                        <!-- 图片列表 -->
+                        <div class="img-box-list img-box-list-all">
+                            <ul>
+                                <!--<li>
+                                    <div >
+                                        <img src="../../image/unpack/zanwei.jpg" alt="">
+                                        <p class="img-list-time">2018-03-28 14:36:45</p>
+                                        <i class="img-list-i"></i>
+                                    </div>
+                                </li>-->
+                            </ul>
+                        </div>
+                        <div class="img-box-list img-box-list-unpack">
+                            <ul></ul>
+                        </div>
+                    </div>
+                </div>
+                <!--视频-->
+                <div class="mf-video-box">
+                    <div class="mfv-header">
+                        <ul class="video-ul-box">
+                            <li class="active">监控1</li><!--  -->
+                            <li>监控2</li>
+                            <li>监控3</li>
+                            <li>监控4</li>
+                        </ul>
+                    </div>
+                    <div class="video-box" style="position: relative">
+                        <div class="vb-header" style="display: none;">
+                            <span>操机人 </span><span class="color-span">吴所谓</span>
+                        </div>
+                        <div class="time-control">
+                            <p>时间范围</p>
+                            <div class="time-container">
+                                <span class="time-icon"><i class="iconmar icon wb-calendar"></i></span>
+                                <input id="screenTime1" type="text" placeholder="请选择日期" class="time-input">
+                                <span class="overtime-icon"><i class="iconmar icon wb-close"></i></span>
+                            </div>
+                        </div>
+                        <!--视频-->
+                        <div class="video-content" id="videoContent">
+                            <div class="border-aa">
+                                <!-- <div id="divPlugin">
+
+                                </div> -->
+                                
+                                <object classid="clsid:FC2CA541-806E-4015-950F-EB5B74409F44" id="PlayBackocx" width="90%" height="430px" name="ocx"></object>
+                                
+                                <!-- <div class="video-btn">
+                                    慢放
+                                    <span class="" onclick="clickPlaySlow()">
+                                        <i class="slow-down icon fa-backward"></i>
+                                    </span>
+                                    开始暂停
+                                    icon fa-pause
+                                    <span class="" onclick="startStopPlayback(this)">
+                                         <i class="start-pause icon fa-pause"></i>
+                                    </span>
+                                    快放
+                                    <span class="" onclick="clickPlayFast()">
+                                        <i class="fast-release icon fa-forward"></i>
+                                    </span>
+                                    拍照
+                                    <span class="span-right">
+                                        <i class="vb-camera icon ion-ios-camera" onclick="CapturePicture()"></i>
+                                    </span>
+                                </div> -->
+                            </div>
+                        </div>
+
+                        <!-- 视频下载窗口 -->
+                        <!-- <div class="video-list">
+                            <table border="1">
+                                <thead>
+                                <tr>
+                                    <th width="20%">序号</th>
+                                    <th width="30%">开始时间</th>
+                                    <th width="30%">结束时间</th>
+                                    <th width="20%">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="searchlist" class="searchlist" cellpadding="0" cellspacing="0">
+
+                                </tbody>
+                            </table>
+                        </div>-->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--登录提示-->
+    <div id="loginHint" class="notice-model">
+        <i class="icon  wb-info-circle"></i>
+        <span></span>
+    </div>
+
+    <!-- 提示弹窗-->
+    <div class="pop-up-windows hint-windows exit">
+        <div class="shadow-window" onclick="$('.exit').hide()"></div>
+        <div class="vertical-center success" style="left: 54%;">
+            <div class="title">
+                <i class="icon wb-bell hint-icon"></i>
+                <span>你确定退出当前用户？</span>
+                <i class="icon wb-close close-pop" onclick="$('.exit').hide()"></i>
+            </div>
+            <div class="pop-button">
+                <span class="confirm-btn" onclick="loginout()">确定</span>
+                <span class="cancle-btn" onclick="$('.exit').hide()">取消</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="../../lib/jquery-2.0.1.min.js"></script>
+
+
+<script type="text/javascript" src="../../lib/bootstrap.js"></script>
+<script type="text/javascript" src="../../js/laydate/laydate.js"></script>
+<script src="../../lib/justTip/justTools.js"></script>
+<script type="text/javascript" src="../../lib/yfslPageControl.js"></script>
+<script type="text/javascript" src="../../js/Utils.js"></script>
+<script type="text/javascript" src="../../js/Administrator/comprehensiveQueryTable-com.js"></script>
+<script type="text/javascript" src="../../lib/justTip/justTools.js"></script>
+<!-- 视频 -->
+<script src="../../js/webVideo/webVideoCtrl.js"></script>
+<!-- 视频 -->
+
+
+<script type="text/javascript" src="../../js/Administrator/comprehensiveQueryTable.js"></script>
+
+</body>
+</html>
